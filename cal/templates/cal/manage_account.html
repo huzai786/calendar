@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100 ver2 m-b-110">
+                <div class="table100-head">
+                    <table>
+                        <thead>
+                            <tr class="row100 head">
+                                <th class="cell100 column1">Name</th>
+                                <th class="cell100 column2">Email</th>
+                                <th class="cell100 column3">Token File</th>
+                                <th class="cell100 column4">Status</th>
+                                <th class="cell100 column5">Actions</th>
+
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody>
+                            {% for email in emails %}
+                            <tr class="row100 body">
+                                <td class="cell100 column1">{{ email.name }}</td>
+                                <td class="cell100 column2">{{ email.email }}</td>
+                                <td class="cell100 column3">{{ email.token_file }}</td>
+                                <td class="cell100 column4">{{ email.status }}</td>
+                                <td class="cell100 column5">
+                                    <i><a href="{% url 'account-delete' email.id %}"><img src="{% static 'images/del.png' %}" alt=""></a></i>&nbsp;&nbsp;&nbsp;
+                                    <i><a href="{% url 'account-edit' email.id %}"><img src="{% static 'images/edit.png' %}" alt=""></a></i>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

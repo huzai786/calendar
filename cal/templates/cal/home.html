@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100 ver2 m-b-110">
+                <div class="table100-head">
+                    <table>
+                        <thead>
+                            <tr class="row100 head">
+                                <th class="cell100 column1">Event Title</th>
+                                <th class="cell100 column5">Days</th>
+                                <th class="cell100 column2">Days to look</th>
+                                <th class="cell100 column5">Event duration</th>
+                                <th class="cell100 column5">Snooze Duration</th>
+                                <th class="cell100 column5">Filter</th>
+                                <th class="cell100 column5">Calenders</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody>
+                            {% for event in events %}
+                            <tr class="row100 body">
+                                <td class="cell100 column1">{{ event.title }}</td>
+                                <td class="cell100 column5">{{ event.days }}</td>
+                                <td class="cell100 column2">{{ event.days_to_look }}</td>
+                                <td class="cell100 column5">{{ event.event_duration }} {{ event.event_duration_type }}</td>
+                                <td class="cell100 column5">{{ event.snooze_duration }} {{ event.snooze_type }}</td>
+                                <td class="cell100 column5">
+                                    {% for fil in event.filter.all %}
+                                    <i>{{ fil.name }}</i>,
+                                    {% endfor %}
+                                </td>
+                                <td class="cell100 column5">
+                                    {% for cal in event.calenders.all %}
+                                    <i>{{ cal.name }}</i>,
+                                    {% endfor %}    
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

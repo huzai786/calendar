@@ -1,0 +1,50 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100 ver2 m-b-110">
+                <div class="table100-head">
+                    <table>
+                        <thead>
+                            <tr class="row100 head">
+                                <th class="cell100 column1">Filter Detail</th>
+                                <th class="cell100 column2">Filter</th>
+                                <th class="cell100 column3">Before Value</th>
+                                <th class="cell100 column4">Before Value</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody>
+                            {% for filter in filters %}
+                            {% if filter.name == 'Temperature' %}
+                            <tr class="row100 body">
+                                <td class="cell100 column1">{{ filter.detail }}</td>
+                                <td class="cell100 column2">{{ filter.name }}</td>
+                                <td class="cell100 column3">X1 value(Celsius): &nbsp; {{ filter.X1|default_if_none:"Not supplied" }}</td>
+                                <td class="cell100 column4">X2 value(Celsius): &nbsp; {{ filter.X2|default_if_none:"Not supplied" }}</td>
+                            </tr>
+                            {% else %}
+                            <tr class="row100 body">
+                                <td class="cell100 column1">{{ filter.detail }}</td>
+                                <td class="cell100 column2">{{ filter.name }}</td>
+                                <td class="cell100 column3">X1 value(minutes): &nbsp; {{ filter.X1|default_if_none:"Not supplied" }}</td>
+                                <td class="cell100 column4">X2 value(minutes): &nbsp; {{ filter.X2|default_if_none:"Not supplied" }}</td>
+                            </tr>
+                            {% endif %}
+                            
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

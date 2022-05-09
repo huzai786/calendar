@@ -1,0 +1,14 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5" style="box-shadow: 4px 2px 10px rgb(247, 177, 177);">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" class="btn btn-outline-danger"><i><a href="{% url 'account-detail' %}" class="btn btn-outline-danger">Cancel</a></i>
+    </form>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,195 @@
+Event: "go for a walk" 
+Calender = lehrer: lehrercal3@gmail.com
+Filter: custom window filter 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 06:30 PM
+--------------------------
+===============================================
+Filter: window check on the weekdays 
+--------------------------
+day: Wednesday, 11, May, 2022   
+time: 05:15 PM
+--------------------------
+===============================================
+Event: "go for a walk" 
+Calender = khabib: khabibgamer786@gmail.com
+Filter: custom window filter 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 06:30 PM
+------------------------
+day: Tuesday, 10, May, 2022     
+time: 06:30 PM
+------------------------
+day: Wednesday, 11, May, 2022   
+time: 06:30 PM
+------------------------
+day: Thursday, 12, May, 2022    
+time: 06:30 PM
+------------------------
+day: Friday, 13, May, 2022      
+time: 06:30 PM
+------------------------
+day: Saturday, 14, May, 2022    
+time: 06:30 PM
+------------------------
+day: Sunday, 15, May, 2022      
+time: 06:30 PM
+------------------------
+day: Monday, 16, May, 2022      
+time: 06:30 PM
+------------------------
+day: Tuesday, 17, May, 2022     
+time: 06:30 PM
+------------------------
+day: Wednesday, 18, May, 2022   
+time: 06:30 PM
+--------------------------
+===============================================
+Filter: window check on the weekdays 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 05:15 PM
+------------------------
+day: Tuesday, 10, May, 2022     
+time: 05:15 PM
+------------------------
+day: Wednesday, 11, May, 2022   
+time: 05:15 PM
+------------------------
+day: Thursday, 12, May, 2022    
+time: 05:15 PM
+------------------------
+day: Friday, 13, May, 2022      
+time: 05:15 PM
+------------------------
+day: Saturday, 14, May, 2022    
+time: 05:15 PM
+------------------------
+day: Sunday, 15, May, 2022      
+time: 05:15 PM
+------------------------
+day: Monday, 16, May, 2022      
+time: 05:15 PM
+------------------------
+day: Tuesday, 17, May, 2022     
+time: 05:15 PM
+------------------------
+day: Wednesday, 18, May, 2022   
+time: 05:15 PM
+--------------------------
+===============================================
+Event: "go eat" 
+Calender = lehrer: Birthdays
+Filter: custom window filter 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 07:00 PM
+------------------------
+day: Tuesday, 10, May, 2022     
+time: 07:00 PM
+------------------------
+day: Saturday, 14, May, 2022    
+time: 07:00 PM
+------------------------
+day: Sunday, 15, May, 2022      
+time: 07:00 PM
+------------------------
+day: Monday, 16, May, 2022      
+time: 07:00 PM
+------------------------
+day: Tuesday, 17, May, 2022     
+time: 07:00 PM
+------------------------
+day: Saturday, 21, May, 2022    
+time: 07:00 PM
+--------------------------
+===============================================
+Filter: window check on the weekdays 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 05:45 PM
+------------------------
+day: Tuesday, 10, May, 2022     
+time: 05:45 PM
+------------------------
+day: Saturday, 14, May, 2022    
+time: 05:45 PM
+------------------------
+day: Sunday, 15, May, 2022      
+time: 05:45 PM
+------------------------
+day: Monday, 16, May, 2022      
+time: 05:45 PM
+------------------------
+day: Tuesday, 17, May, 2022     
+time: 05:45 PM
+------------------------
+day: Saturday, 21, May, 2022    
+time: 05:45 PM
+--------------------------
+===============================================
+Event: "go eat" 
+Calender = lehrer: lehrercal3@gmail.com
+Filter: custom window filter 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 07:00 PM
+--------------------------
+===============================================
+Filter: window check on the weekdays 
+--------------------------
+No possible date
+--------------------------
+===============================================
+Event: "go eat" 
+Calender = khabib: khabibgamer786@gmail.com
+Filter: custom window filter 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 07:00 PM
+------------------------
+day: Tuesday, 10, May, 2022     
+time: 07:00 PM
+------------------------
+day: Saturday, 14, May, 2022    
+time: 07:00 PM
+------------------------
+day: Sunday, 15, May, 2022      
+time: 07:00 PM
+------------------------
+day: Monday, 16, May, 2022      
+time: 07:00 PM
+------------------------
+day: Tuesday, 17, May, 2022     
+time: 07:00 PM
+------------------------
+day: Saturday, 21, May, 2022    
+time: 07:00 PM
+--------------------------
+===============================================
+Filter: window check on the weekdays 
+--------------------------
+day: Monday, 09, May, 2022      
+time: 05:45 PM
+------------------------
+day: Tuesday, 10, May, 2022     
+time: 05:45 PM
+------------------------
+day: Saturday, 14, May, 2022    
+time: 05:45 PM
+------------------------
+day: Sunday, 15, May, 2022      
+time: 05:45 PM
+------------------------
+day: Monday, 16, May, 2022      
+time: 05:45 PM
+------------------------
+day: Tuesday, 17, May, 2022     
+time: 05:45 PM
+------------------------
+day: Saturday, 21, May, 2022    
+time: 05:45 PM
+--------------------------
+===============================================
