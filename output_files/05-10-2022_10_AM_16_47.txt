@@ -1,0 +1,44 @@
+Event: "go for a walk" 
+Calender = lehrer: lehrercal3@gmail.com
+Filter: yes it will be sunrise 
+--------------------------
+day: Monday, 23, May, 2022      
+time: 04:29 AM
+--------------------------
+===============================================
+Filter: Sun set for monday 
+--------------------------
+No possible date
+--------------------------
+===============================================
+Event: "go for a walk" 
+Calender = khabib: khabibgamer786@gmail.com
+Filter: yes it will be sunrise 
+--------------------------
+day: Tuesday, 10, May, 2022     
+time: 04:38 AM
+------------------------
+day: Monday, 16, May, 2022      
+time: 04:33 AM
+------------------------
+day: Tuesday, 17, May, 2022     
+time: 04:33 AM
+------------------------
+day: Monday, 23, May, 2022      
+time: 04:29 AM
+------------------------
+day: Tuesday, 24, May, 2022     
+time: 04:29 AM
+------------------------
+day: Monday, 30, May, 2022      
+time: 04:26 AM
+------------------------
+day: Tuesday, 31, May, 2022     
+time: 04:26 AM
+--------------------------
+===============================================
+Filter: Sun set for monday 
+--------------------------
+No possible date
+--------------------------
+===============================================

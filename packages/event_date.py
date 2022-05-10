@@ -37,7 +37,7 @@ class CalendarEvent(object):
         myTimeZone = pytz.timezone('US/Pacific')
         start = myTimeZone.localize(startDate)
         end = myTimeZone.localize(endDate)
-        events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat() ).execute()
+        events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
         events = [event['summary'] for event in events['items']]
         if len(events) != 0:
             return (True, events)

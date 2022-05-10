@@ -35,7 +35,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                 # List of days eg. ['Monday', 'Tuesday', etc]
                 if next_day.strftime('%A') in days:
                     days_searched += 1
-                    if temperature_included:
+                    if temperature_included is True:
                         temperature = get_temperature(next_day)
                         get_temp = (temperature * 9/5) + 32
                         
@@ -45,7 +45,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
                                         snooze_duration, apply_snooze, snooze_days, next_day)
-
+                                print(possible_date)
                                 initial_date = initial_date
                                 
                                 if possible_date is not None:
@@ -78,6 +78,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                                         snooze_duration, apply_snooze, snooze_days, next_day)
 
                                 initial_date = initial_date
+                                
                                 if possible_date is not None:
                                     dates_available.append(possible_date)
                                         
@@ -96,7 +97,6 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                         
                         
                 initial_date += timedelta(days=1)
-            print(filter_name, dates_available)
             d = dates_available or ['No possible date']
             s = '\n------------------------\n'.join(d)
             message = f'Filter: {filter_detail} \n' + '--------------------------\n' + s + \

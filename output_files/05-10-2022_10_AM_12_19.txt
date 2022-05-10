@@ -1,0 +1,8 @@
+Event: "go for a walk" 
+Calender = lehrer: lehrercal3@gmail.com
+Filter: yes it will be sunrise 
+--------------------------
+day: Monday, 23, May, 2022      
+time: 04:29 AM
+--------------------------
+===============================================

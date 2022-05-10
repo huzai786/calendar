@@ -36,7 +36,6 @@ def script():
             event.snooze_duration, event.snooze_type)
         
         apply_snooze = event.apply_snooze
-        
         snooze_days = list(event.snooze_days)
         
         calender_ids = [{'name': i.name, 'id': i.ide,
