@@ -1,12 +1,14 @@
 from __future__ import print_function
 
 import os.path
+import os
 from pytz import timezone
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import pytz
+import sys
 
 
 class CalendarEvent(object):
@@ -24,7 +26,17 @@ class CalendarEvent(object):
             creds = Credentials.from_authorized_user_file(path, self.SCOPES)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
+                print(creds.refresh_token)
+                print(creds)
+                print(creds.expired)
+                try:
+                    creds.refresh(Request())
+                    
+                except Exception as e:
+                    os.remove(path)
+                    print(e)
+                    sys.exit()
+                    
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
                     f'media/{self.token_url}', self.SCOPES)
@@ -37,13 +49,15 @@ class CalendarEvent(object):
         myTimeZone = pytz.timezone('US/Pacific')
         start = myTimeZone.localize(startDate)
         end = myTimeZone.localize(endDate)
-        events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
-        events = [event['summary'] for event in events['items']]
-        if len(events) != 0:
-            return (True, events)
-        else:
-            return (None, [])
-
+        try:
+            events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
+            events = [event['summary'] for event in events['items']]
+            if len(events) != 0:
+                return (True, events)
+            else:
+                return (None, [])
+        except Exception as e:
+            print(e)
 
 
 
