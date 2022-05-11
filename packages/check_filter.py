@@ -109,22 +109,25 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
         
         end_date = datetime.combine(
             next_day.date(), y.time())
-
+        
         while event_end_date < end_date:
+            print('------------------------------')
             print('event_between_date', event_between_date)
             print('event_end_date', event_end_date)
-            event_value, events = calendar.calendar_event_func(
-                event_between_date, event_end_date)
+            if event_end_date >= end_date:
+                print('yes')
+                return None, False
+            
+            if event_between_date < event_end_date:
+                event_value, events = calendar.calendar_event_func(
+                    event_between_date, event_end_date)
+                print('event_value, events: ', event_value, events)
+            
             if event_value is None:
                 print('event_value: ', event_value)
                 schedule_date = event_between_date.strftime(
                     '%A, %d, %B, %Y       %I:%M %p')
-                print('schedule_date', schedule_date)
                 return schedule_date, False
-
-            if event_end_date > end_date:
-
-                return None, False
 
             if apply_snooze == True:
                 
@@ -135,7 +138,7 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
                         return None, True
 
                     else:
-                        start_date += timedelta(minutes=event_duration)
+                        event_end_date += timedelta(minutes=event_duration)
 
                 if snooze_days != []:
 
@@ -143,11 +146,11 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
                         return None, True
 
                     else:
-                        start_date += timedelta(minutes=event_duration)
-                    
+                        event_end_date += timedelta(minutes=event_duration)
+
             else:
-                start_date += timedelta(minutes=event_duration)
-                print('start_date', start_date)
+                event_between_date += timedelta(minutes=event_duration)
+                event_end_date += timedelta(minutes=event_duration)
 
 
 def set_sunrise_filter(title, sunrise1, sunrise2, event_duration, calendar, next_day, snooze_days

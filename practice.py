@@ -12,15 +12,10 @@ path = '/json_files/lehr.json'
 ide = 'lehrercal3@gmail.com'
 c = CalendarEvent(name, path, ide)
 
-start = datetime(2022, 5, 16, 6, 35)
-end = start + timedelta(minutes=20)
+start = datetime(2022, 5, 19, 7, 0)
+end = start + timedelta(hours=3.5)
+x = c.get_event_detail(start, end)
 
-v = c.get_event_detail('ksml00onhbhe9bu4kmqil34scg@google.com')
+print(x)
 
-# print(i, x)
-print(v)
-
-# for i in range(15):
-#     a = get_temperature(date + timedelta(days=i))
-#     print(a)
 

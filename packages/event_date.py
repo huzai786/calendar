@@ -10,6 +10,7 @@ from googleapiclient.discovery import build
 import pytz
 import sys
 import pprint
+from datetime import datetime 
 
 
 class CalendarEvent(object):
@@ -47,16 +48,16 @@ class CalendarEvent(object):
         end = myTimeZone.localize(endDate)
         try:
             events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
-            events = [(event['summary'], events['id']) for event in events['items']]
+            events = [(event['summary']) for event in events['items']]
             
             if len(events) != 0:
                 return (True, events)
             else:
                 return (None, [])
         except Exception as e:
-            print(e)
+            print('error: ', e)
 
-    def get_event_detail(self, event_id):
+    def get_event_detail(self, startDate, endDate):
         creds = None
         path = f'media/{self.name}_token.json'
         if os.path.exists(path):
@@ -76,14 +77,29 @@ class CalendarEvent(object):
         # Save the credentials for the next run
             with open(f'media/{self.name}_token.json', 'w') as token:
                 token.write(creds.to_json()) 
+        page_token = None
         service = build('calendar', 'v3', credentials=creds)
+        myTimeZone = pytz.timezone('US/Pacific')
+        start = myTimeZone.localize(startDate)
+        end = myTimeZone.localize(endDate)
         try:
-            event = service.events().get(calendarId=self.calender_id, eventId=event_id).execute()
-            with open('data.txt', 'w', encoding='utf-8') as f:
-                f.write(pprint.pformat(events))            
+            events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
+            events = [event['id'] for event in events['items']]
+            if len(events) != 0:
+                date_range = []
+                for e in events:
+                    event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
+                    x = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+                    y = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+                    xi = datetime.combine(startDate.date(), x.time())
+                    yi = datetime.combine(endDate.date(), y.time()) 
+                    date_range.append((xi, yi))
+                return date_range
+            
+            else:
+                return (None, [])
         except Exception as e:
             print('error: ', e)
-
 
 
 
