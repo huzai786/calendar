@@ -15,7 +15,6 @@ from packages.script_utils import get_event_duration, get_snooze_duration, add_m
 
 def script():
     date = datetime.now().strftime('%m-%d-%Y_%I_%p_%M_%S')
-    print(date)
     msg = ''
     for event in EventDetails.objects.all():
         

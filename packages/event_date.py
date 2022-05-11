@@ -26,15 +26,10 @@ class CalendarEvent(object):
             creds = Credentials.from_authorized_user_file(path, self.SCOPES)
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
-                print(creds.refresh_token)
-                print(creds)
-                print(creds.expired)
                 try:
                     creds.refresh(Request())
-                    
                 except Exception as e:
                     os.remove(path)
-                    print(e)
                     sys.exit()
                     
             else:
