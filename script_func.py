@@ -27,11 +27,10 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
             date = datetime.now().strftime('%Y-%m-%d')
             initial_date = datetime.strptime(date, '%Y-%m-%d')
             dates_available = []
-            print(filteri)
             while True:
                 if days_searched == days_to_look:
                     break
-                next_day = initial_date
+                next_day = initial_date.replace(hour=0, minute=0)
                 # List of days eg. ['Monday', 'Tuesday', etc]
                 if next_day.strftime('%A') in days:
                     days_searched += 1
@@ -41,11 +40,9 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                         
                         if tempx1 != 0 and tempx2 == 0:
                             if get_temp > tempx1:
-                                
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
                                         snooze_duration, apply_snooze, snooze_days, next_day)
-                                print(possible_date)
                                 initial_date = initial_date
                                 
                                 if possible_date is not None:
@@ -56,7 +53,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                                 continue
 
                         if tempx2 != 0 and tempx1 == 0:
-                            if get_temp < tempx2:
+                            if get_temp <= tempx2:
                                 
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
@@ -72,7 +69,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                                 continue
 
                         if tempx1 != 0 and tempx2 != 0:
-                            if tempx1 > get_temp < tempx2:
+                            if tempx1 >= get_temp <= tempx2:
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
                                         snooze_duration, apply_snooze, snooze_days, next_day)
