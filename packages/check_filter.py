@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from packages.sunriset import ZipInfo
 from packages.lowtide import get_lowtide
+from packages.script_utils import findFirstOpenSlot
 
 
 
@@ -103,55 +104,24 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
         start_date = datetime.combine(
             next_day.date(), x.time())
         
-        event_between_date = start_date
-        
-        event_end_date = event_between_date + timedelta(minutes=event_duration)
-        
         end_date = datetime.combine(
             next_day.date(), y.time())
         
-        while event_end_date < end_date:
-            print('------------------------------')
-            print('event_between_date', event_between_date)
-            print('event_end_date', event_end_date)
-            if event_end_date >= end_date:
-                print('yes')
-                return None, False
-            
-            if event_between_date < event_end_date:
-                event_value, events = calendar.calendar_event_func(
-                    event_between_date, event_end_date)
-                print('event_value, events: ', event_value, events)
-            
-            if event_value is None:
-                print('event_value: ', event_value)
-                schedule_date = event_between_date.strftime(
-                    '%A, %d, %B, %Y       %I:%M %p')
-                return schedule_date, False
+        date_ranges, event_names = calendar.get_event_detail(start_date, end_date)
+        
+        date, snooze = findFirstOpenSlot(date_ranges, start_date, end_date, event_duration,
+                                        event_names, title, apply_snooze, snooze_days, next_day)
+        
+        if date is not None:
+            schedule_date = date.strftime(
+                '%A, %d, %B, %Y       %I:%M %p')
 
-            if apply_snooze == True:
-                
-                if snooze_days == []:
-
-                    if title in events:
-
-                        return None, True
-
-                    else:
-                        event_end_date += timedelta(minutes=event_duration)
-
-                if snooze_days != []:
-
-                    if (title in events) and (event_between_date.strftime('%A') in snooze_days):
-                        return None, True
-
-                    else:
-                        event_end_date += timedelta(minutes=event_duration)
-
-            else:
-                event_between_date += timedelta(minutes=event_duration)
-                event_end_date += timedelta(minutes=event_duration)
-
+            return schedule_date, False
+        
+        if snooze is True:
+            return None, True
+        
+        return None, False
 
 def set_sunrise_filter(title, sunrise1, sunrise2, event_duration, calendar, next_day, snooze_days
                         ,apply_snooze):

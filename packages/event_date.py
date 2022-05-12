@@ -87,14 +87,20 @@ class CalendarEvent(object):
             events = [event['id'] for event in events['items']]
             if len(events) != 0:
                 date_range = []
+                event_names = []
                 for e in events:
                     event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
                     x = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+                    print(x)
                     y = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+                    print(y)
                     xi = datetime.combine(startDate.date(), x.time())
                     yi = datetime.combine(endDate.date(), y.time()) 
+                    event_name = event['summary']
                     date_range.append((xi, yi))
-                return date_range
+                    event_names.append(event_name)
+                
+                return sorted(date_range), event_names
             
             else:
                 return (None, [])
