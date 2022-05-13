@@ -6,7 +6,7 @@ from packages.check_filter import set_filters
 
 
 def main_func(title, days_to_look, calender_ids, days, filter_data, event_duration, 
-                        snooze_duration, apply_snooze, snooze_days):
+                        snooze_duration, apply_snooze, snooze_days, include_free_event):
 
     event_in_all_cal_msg = ''
     for i in calender_ids:
@@ -42,7 +42,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                             if get_temp > tempx1:
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
-                                        snooze_duration, apply_snooze, snooze_days, next_day)
+                                        snooze_duration, apply_snooze, snooze_days, next_day, include_free_event)
                                 initial_date = initial_date
                                 
                                 if possible_date is not None:
@@ -57,7 +57,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                                 
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
-                                        snooze_duration, apply_snooze, snooze_days, next_day)
+                                        snooze_duration, apply_snooze, snooze_days, next_day, include_free_event)
 
                                 initial_date = initial_date
                                 
@@ -72,7 +72,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                             if tempx1 >= get_temp <= tempx2:
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
-                                        snooze_duration, apply_snooze, snooze_days, next_day)
+                                        snooze_duration, apply_snooze, snooze_days, next_day, include_free_event)
 
                                 initial_date = initial_date
                                 
@@ -86,7 +86,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     else:           # POSSIBLE DATE IS LIST
                         initial_date, possible_date = set_filters(
                             title, calendar, filter_name, x1, x2, event_duration, 
-                                    snooze_duration, apply_snooze, snooze_days, next_day)
+                                    snooze_duration, apply_snooze, snooze_days, next_day, include_free_event)
                         initial_date = initial_date
                         
                         if possible_date is not None:

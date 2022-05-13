@@ -34,7 +34,7 @@ class Filter(models.Model):
     Temperature_X2 = models.FloatField('Temperature value (X2)', null=True, blank=True)
 
     def __str__(self):
-        return str(self.filter_detail)[:100] + f' || values = (X1: {self.X1}),   (X2: {self.X2}) || Temp included: {self.add_temperature}' 
+        return str(self.filter_detail)[:100] + f' || values = (X1: {self.X1}), (X2: {self.X2}) || Temp included: {self.add_temperature}' 
 
     class Meta:
         verbose_name_plural = "FIlters"
@@ -43,6 +43,7 @@ class EventDetails(models.Model):
     title = models.CharField(max_length=200)
     days_to_look = models.IntegerField(null=True)
     days = MultiSelectField(choices=day_choices, null=True)
+    free_event = models.BooleanField('include free events?', default=True)
     event_duration_type = models.CharField(max_length=100, choices=event_duration_choice)
     event_duration = models.IntegerField()
     apply_snooze = models.BooleanField(default=True) 

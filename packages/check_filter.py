@@ -6,7 +6,7 @@ from packages.script_utils import findFirstOpenSlot
 
 
 def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_day, snooze_days, 
-                        apply_snooze):
+                        apply_snooze, include_free_event):
     
     schedule_date = None
 
@@ -22,7 +22,7 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
             timedelta(minutes=event_duration)
 
         event_value, events = calendar.calendar_event_func(
-            start_date, end_date)
+            start_date, end_date, include_free_event)
         print('event_value, events', event_value, events)
         if event_value is None:
 
@@ -63,7 +63,7 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
             timedelta(minutes=event_duration)
 
         event_value, events = calendar.calendar_event_func(
-            end_date, start_date)
+            end_date, start_date, include_free_event)
 
         if event_value is None:
 
@@ -107,7 +107,7 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
         end_date = datetime.combine(
             next_day.date(), y.time())
         
-        date_ranges, event_names = calendar.get_event_detail(start_date, end_date)
+        date_ranges, event_names = calendar.get_event_detail(start_date, end_date, include_free_event)
         
         date, snooze = findFirstOpenSlot(date_ranges, start_date, end_date, event_duration,
                                         event_names, title, apply_snooze, snooze_days, next_day)
@@ -124,7 +124,7 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
         return None, False
 
 def set_sunrise_filter(title, sunrise1, sunrise2, event_duration, calendar, next_day, snooze_days
-                        ,apply_snooze):
+                        ,apply_snooze, include_free_event):
 
     sun_riset_info = ZipInfo(92009)
 
@@ -144,7 +144,7 @@ def set_sunrise_filter(title, sunrise1, sunrise2, event_duration, calendar, next
             timedelta(minutes=sunrise1)
 
         event_value, events = calendar.calendar_event_func(
-            start_date, end_date)
+            start_date, end_date, include_free_event)
 
         if event_value is None:
 
@@ -185,7 +185,7 @@ def set_sunrise_filter(title, sunrise1, sunrise2, event_duration, calendar, next
             timedelta(minutes=sunrise2)
 
         event_value, events = calendar.calendar_event_func(
-            end_date, start_date)
+            end_date, start_date, include_free_event)
 
         if event_value is None:
 
@@ -215,9 +215,8 @@ def set_sunrise_filter(title, sunrise1, sunrise2, event_duration, calendar, next
         else:
             return None, False
 
-
 def set_sunset_filter(title, sunset1, sunset2, event_duration, calendar, next_day, snooze_days
-                        ,apply_snooze):
+                        ,apply_snooze, include_free_event):
     """function that return datetime of the sunrise of the input date"""
     sun_riset_info = ZipInfo(92009)
 
@@ -236,7 +235,7 @@ def set_sunset_filter(title, sunset1, sunset2, event_duration, calendar, next_da
             timedelta(minutes=sunset1)
 
         event_value, events = calendar.calendar_event_func(
-            start_date, end_date)
+            start_date, end_date, include_free_event)
 
         if event_value is None:
 
@@ -275,7 +274,7 @@ def set_sunset_filter(title, sunset1, sunset2, event_duration, calendar, next_da
         end_date = get_sunset_info + \
             timedelta(minutes=sunset2) + timedelta(minutes=event_duration)
         event_value, events = calendar.calendar_event_func(
-            start_date, end_date)
+            start_date, end_date, include_free_event)
         if event_value is None:
             schedule_date = start_date.strftime(
                 '%A, %d, %B, %Y       %I:%M %p')
@@ -304,9 +303,8 @@ def set_sunset_filter(title, sunset1, sunset2, event_duration, calendar, next_da
         else:
             return None, False
 
-
 def set_lowtide_filter(title, lowtide1, lowtide2, event_duration, calendar, next_day, snooze_days,
-                        apply_snooze):
+                        apply_snooze, include_free_event):
     """Function that return datetime of the low tide of the input date"""
 
     tide_info = get_lowtide(next_day)
@@ -324,7 +322,7 @@ def set_lowtide_filter(title, lowtide1, lowtide2, event_duration, calendar, next
             timedelta(minutes=lowtide1)
 
         event_value, events = calendar.calendar_event_func(
-            start_date, end_date)
+            start_date, end_date, include_free_event)
 
         if event_value is None:
 
@@ -366,7 +364,7 @@ def set_lowtide_filter(title, lowtide1, lowtide2, event_duration, calendar, next
         print('end_date', end_date)
         
         event_value, events = calendar.calendar_event_func(
-            start_date, end_date)
+            start_date, end_date, include_free_event)
         print('event_value, events: ', event_value, events)
         print('--------------------------------------')
         if event_value is None:
@@ -399,8 +397,9 @@ def set_lowtide_filter(title, lowtide1, lowtide2, event_duration, calendar, next
             return None, False
 
 
+
 def set_filters(title, calendar, filter_name, x1, x2, event_duration, snooze_duration, 
-                    apply_snooze, snooze_days, next_day):
+                    apply_snooze, snooze_days, next_day, include_free_event):
 
     if filter_name == 'Window':
         date_msg = None
@@ -410,7 +409,7 @@ def set_filters(title, calendar, filter_name, x1, x2, event_duration, snooze_dur
         windowx2 = x2  # Get window x2 value from filter_data
         
         time_window_available, snooze_check = set_window_filter(  # Output datetime/None,  True/False
-            title, windowx1, windowx2, event_duration, calendar, next_day, snooze_days, apply_snooze)
+            title, windowx1, windowx2, event_duration, calendar, next_day, snooze_days, apply_snooze, include_free_event)
         
         if time_window_available is not None:
             date_msg = f'day: {time_window_available[:26]} \ntime: {time_window_available[-8:]}'
@@ -435,7 +434,7 @@ def set_filters(title, calendar, filter_name, x1, x2, event_duration, snooze_dur
         sunrise2 = int(x2 or 0)  # Get sunrise x2 value from filter_data
 
         sunrise_time_available, snooze_check = set_sunrise_filter(  # Output datetime/None,  True/False
-            title, sunrise1, sunrise2, event_duration, calendar, next_day, snooze_days, apply_snooze)
+            title, sunrise1, sunrise2, event_duration, calendar, next_day, snooze_days, apply_snooze, include_free_event)
 
         if sunrise_time_available is not None:
             date_msg = f'day: {sunrise_time_available[:26]} \ntime: {sunrise_time_available[-8:]}'
@@ -460,7 +459,7 @@ def set_filters(title, calendar, filter_name, x1, x2, event_duration, snooze_dur
         sunset2 = int(x2 or 0)  # Get Sunset x2 value from filter_data
 
         sunset_time_available, snooze_check = set_sunset_filter(  # Output datetime/None,  True/False
-            title, sunset1, sunset2, event_duration, calendar, next_day, snooze_days, apply_snooze)
+            title, sunset1, sunset2, event_duration, calendar, next_day, snooze_days, apply_snooze, include_free_event)
         print('sunset_time_available, snooze_check: ', sunset_time_available, snooze_check)
         
         if sunset_time_available is not None:
@@ -486,7 +485,7 @@ def set_filters(title, calendar, filter_name, x1, x2, event_duration, snooze_dur
         lowtide2 = int(x2 or 0)  # Get lowtide x2 value from filter_data
 
         lowtide_time_available, snooze_check = set_lowtide_filter(  # Output datetime/None,  True/False
-            title, lowtide1, lowtide2, event_duration, calendar, next_day, snooze_days, apply_snooze)
+            title, lowtide1, lowtide2, event_duration, calendar, next_day, snooze_days, apply_snooze, include_free_event)
 
         if lowtide_time_available is not None:
 
