@@ -2,14 +2,12 @@ from __future__ import print_function
 
 import os.path
 import os
-from pytz import timezone
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 import pytz
 import sys
-import pprint
 from datetime import datetime 
 
 
@@ -124,18 +122,24 @@ class CalendarEvent(object):
                 busy_event_names = []
                 for e in events:
                     event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
-                    x = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
-                    print(x)
-                    y = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
-                    print(y)
-                    xi = datetime.combine(startDate.date(), x.time())
-                    yi = datetime.combine(endDate.date(), y.time()) 
-                    print(pprint.pformat(event))
                     event_name = event['summary']
 
                     if not event['start'].get('dateTime'):
-                        return (startDate, endDate), event['summary']
-                    
+                        print('long event', event_name)
+                        return [(startDate, endDate)], [event_name]
+
+                    if event['start'].get('dateTime') and event['end'].get('dateTime'):
+                        x = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+                        y = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+
+                    else:
+                        x = datetime.strptime(event['start'].get('date'), '%Y-%m-%d').replace(tzinfo = None)
+                        y = datetime.strptime(event['end'].get('date'), '%Y-%m-%d').replace(tzinfo = None)
+
+                    xi = datetime.combine(startDate.date(), x.time())
+                    yi = datetime.combine(endDate.date(), y.time()) 
+
+
                     if 'transparency' not in event:
 
                         busy_date_ranges.append((xi, yi))

@@ -109,7 +109,7 @@ def set_window_filter(title, windowx1, windowx2, event_duration, calendar, next_
         
         date_ranges, event_names = calendar.get_event_detail(start_date, end_date, include_free_event)
         
-        date, snooze = findFirstOpenSlot(date_ranges, start_date, end_date, event_duration,
+        date, snooze = findFirstOpenSlot(date_ranges, start_date, end_date, timedelta(minutes=event_duration),
                                         event_names, title, apply_snooze, snooze_days, next_day)
         
         if date is not None:

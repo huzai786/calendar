@@ -1,0 +1,14 @@
+Event: "go for a walk" 
+Calender = lehrer: lehrercal3@gmail.com
+Filter: window test 
+--------------------------
+day: Thursday, 19, May, 2022    
+time: 08:15 AM
+------------------------
+day: Sunday, 22, May, 2022      
+time: 07:10 AM
+------------------------
+day: Monday, 23, May, 2022      
+time: 09:00 AM
+--------------------------
+===============================================

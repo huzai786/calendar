@@ -1,7 +1,0 @@
-Event: "go for a walk" 
-Calender = lehrer: lehrercal3@gmail.com
-Filter: window test 
---------------------------
-No possible date
---------------------------
-===============================================
