@@ -54,7 +54,7 @@ class CalendarEvent(object):
                 busy_event_names = []
                 for e in event_ids:
                     event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
-
+                    
                     if not event['start'].get('dateTime'):
                         return True, [event['summary']]
 
@@ -125,19 +125,14 @@ class CalendarEvent(object):
                     event_name = event['summary']
 
                     if not event['start'].get('dateTime'):
-                        print('long event', event_name)
                         return [(startDate, endDate)], [event_name]
 
                     if event['start'].get('dateTime') and event['end'].get('dateTime'):
                         x = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
                         y = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
 
-                    else:
-                        x = datetime.strptime(event['start'].get('date'), '%Y-%m-%d').replace(tzinfo = None)
-                        y = datetime.strptime(event['end'].get('date'), '%Y-%m-%d').replace(tzinfo = None)
-
-                    xi = datetime.combine(startDate.date(), x.time())
-                    yi = datetime.combine(endDate.date(), y.time()) 
+                        xi = datetime.combine(startDate.date(), x.time())
+                        yi = datetime.combine(endDate.date(), y.time()) 
 
 
                     if 'transparency' not in event:
@@ -154,12 +149,13 @@ class CalendarEvent(object):
 
                     date_range = free_date_ranges + busy_date_ranges
                     event_names = free_event_names + busy_event_names
-                    return sorted(date_range), event_names
+                    return list(set(sorted(date_range))), event_names
 
                 if include_free_event is False:
-                    return sorted(busy_date_ranges), busy_event_names
+                    return list(set(sorted(busy_date_ranges))), busy_event_names
             else:
                 return (None, [])
+            
         except Exception as e:
             print('error: ', e)
 
