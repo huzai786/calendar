@@ -9,12 +9,12 @@ path = '/json_files/lehr.json'
 ide = 'lehrercal3@gmail.com'
 c = CalendarEvent(name, path, ide)
 
-start = datetime(2022, 5, 19, 0, 0)
+start = datetime(2022, 5, 22, 0, 0)
 end = start + timedelta(hours=23)
 x, y = c.get_event_detail(start, end, True)
 events = sorted(x)
 # print(y)
-
+print(events)
 
 # num = [(2, 5), (3, 4), (4, 7), (5, 6), (6, 11), (10, 11)]
 
@@ -39,6 +39,7 @@ startRange = [x[0] for x in events]
 endRange = [x[1] for x in events]
 print('start', startRange)
 print('end', endRange)
+lastEvent = endRange[-1]
 duration = timedelta(minutes=30)
 can_be = []                 # start of next, end of before
 not_be = []
@@ -56,8 +57,9 @@ for i, v in enumerate(can_be):
     if any(v > x for x in not_be):
         yess.append(v)
         
-# can_be = [i for i in can_be if i >]
 
+if duration < (end - lastEvent):
+    print(lastEvent, False)
 print(can_be)
 print(not_be)
 print(yess)

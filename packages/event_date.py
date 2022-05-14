@@ -45,9 +45,9 @@ class CalendarEvent(object):
         start = myTimeZone.localize(startDate)
         end = myTimeZone.localize(endDate)
         try:
-            events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
-            events = [(event['summary']) for event in events['items']]
-            event_ids = [(event['id']) for event in events['items']]
+            Events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
+            events = [(event['summary']) for event in Events['items']]
+            event_ids = [(event['id']) for event in Events['items']]
             
             if len(events) != 0:
                 free_event_names = []

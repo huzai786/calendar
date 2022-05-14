@@ -312,9 +312,7 @@ def set_lowtide_filter(title, lowtide1, lowtide2, event_duration, calendar, next
     schedule_date = None
 
     if lowtide1 != 0 and lowtide2 == 0:
-
-        start_date = tide_info - \
-            timedelta(minutes=lowtide1) - \
+        start_date = tide_info - timedelta(minutes=lowtide1) - \
             timedelta(
                 minutes=event_duration)
 
