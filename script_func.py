@@ -53,8 +53,8 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                                 continue
 
                         if tempx2 != 0 and tempx1 == 0:
-                            if get_temp <= tempx2:
-                                
+                            if get_temp < tempx2:
+                                print('yes')
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
                                         snooze_duration, apply_snooze, snooze_days, next_day, include_free_event)
@@ -69,7 +69,10 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                                 continue
 
                         if tempx1 != 0 and tempx2 != 0:
-                            if tempx1 >= get_temp <= tempx2:
+                            print('not not None')
+                            print(tempx1, get_temp, tempx2)
+                            if (get_temp > tempx1) and (get_temp < tempx2):
+                                print('its not here')
                                 initial_date, possible_date = set_filters(
                                     title, calendar, filter_name, x1, x2, event_duration, 
                                         snooze_duration, apply_snooze, snooze_days, next_day, include_free_event)

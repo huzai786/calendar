@@ -458,7 +458,6 @@ def set_filters(title, calendar, filter_name, x1, x2, event_duration, snooze_dur
 
         sunset_time_available, snooze_check = set_sunset_filter(  # Output datetime/None,  True/False
             title, sunset1, sunset2, event_duration, calendar, next_day, snooze_days, apply_snooze, include_free_event)
-        print('sunset_time_available, snooze_check: ', sunset_time_available, snooze_check)
         
         if sunset_time_available is not None:
             date_msg = f'day: {sunset_time_available[:26]} \ntime: {sunset_time_available[-8:]}'
