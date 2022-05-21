@@ -31,11 +31,8 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                 if next_day.strftime('%A') in days:
                     days_searched += 1
                     if filter_name == 'Temperature':
-                        
-                    if temperature_included is True:
                         temperature = get_temperature(next_day)
                         get_temp = (temperature * 9/5) + 32
-                        
                         if tempx1 != 0 and tempx2 == 0:
                             if get_temp > tempx1:
                                 initial_date, possible_date = set_filters(
