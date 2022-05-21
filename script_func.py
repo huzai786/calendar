@@ -20,9 +20,6 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
             filter_detail = filteri.get('filter_detail')
             x1 = filteri.get('x1')
             x2 = filteri.get('x2')
-            temperature_included = filteri.get('temperature_included') 
-            tempx1 = int(filteri.get('tempX1') or 0)
-            tempx2 = int(filteri.get('tempX2') or 0)
             days_searched = 0
             date = datetime.now().strftime('%Y-%m-%d')
             initial_date = datetime.strptime(date, '%Y-%m-%d')
@@ -31,9 +28,10 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                 if days_searched == days_to_look:
                     break
                 next_day = initial_date.replace(hour=0, minute=0)
-                # List of days eg. ['Monday', 'Tuesday', etc]
                 if next_day.strftime('%A') in days:
                     days_searched += 1
+                    if filter_name == 'Temperature':
+                        
                     if temperature_included is True:
                         temperature = get_temperature(next_day)
                         get_temp = (temperature * 9/5) + 32

@@ -21,12 +21,10 @@ def script():
         title = event.title
         
         days_to_look = event.days_to_look
-                
+        
         days = list(event.days)
         
-        filter_data = [{'filter_name': filter.keyword, 'x1': filter.X1, 'x2': filter.X2, 'temperature_included': filter.add_temperature, 
-                        'tempX1':filter.Temperature_X1, 'tempX2': filter.Temperature_X2,
-                        'filter_detail': filter.filter_detail} for filter in event.filter.all()]
+        filter_data = [{'filter_name': filter.keyword, 'x1': filter.X1, 'x2': filter.X2, 'filter_detail': filter.filter_detail} for filter in event.filter.all()]
         include_free_event = event.free_event
 
         event_duration = get_event_duration(

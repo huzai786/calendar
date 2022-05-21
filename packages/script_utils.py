@@ -29,7 +29,7 @@ def get_snooze_duration(snooze_duration, snooze_type):
 
 
 def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, title, snooze_check, snooze_days, start_date):
-    if date_ranges is not None:
+    if date_ranges != []:
         date_ranges = sorted(date_ranges)
         print('date_ranges', date_ranges)
         eventStarts = [i[0] for i in date_ranges]
@@ -75,8 +75,9 @@ def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, ti
                     return None, True
                 else:
                     return None, False
+                
         else:
             print('end part')
             return None, False 
-    else:
+    if date_ranges is None:
         return startTime, False

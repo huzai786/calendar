@@ -22,6 +22,7 @@ keyword = (
     ('Sunrise','Sunrise'),
     ('Sunset','Sunset'),
     ('Low Tide','Low Tide'),
+    ('Temperature','Temperature'),
     )
 
 class Filter(models.Model):
@@ -29,12 +30,10 @@ class Filter(models.Model):
     keyword = models.CharField(max_length=30, choices=keyword)
     X1 = models.CharField('value to set(X1)', max_length=200, null=True, blank=True)
     X2 = models.CharField('value to set(X2)', max_length=200, null=True, blank=True)
-    add_temperature = models.BooleanField('Add Temperature?', default=False)
-    Temperature_X1 = models.FloatField('Temperature value (X1)', null=True, blank=True)
-    Temperature_X2 = models.FloatField('Temperature value (X2)', null=True, blank=True)
+
 
     def __str__(self):
-        return str(self.filter_detail)[:100] + f' || values = (X1: {self.X1}), (X2: {self.X2}) || Temp included: {self.add_temperature}' 
+        return str(self.filter_detail)[:100]
 
     class Meta:
         verbose_name_plural = "FIlters"
