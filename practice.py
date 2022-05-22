@@ -1,20 +1,15 @@
 from packages.temp import get_temperature
 from datetime import datetime, timedelta
+from packages.event_date import CalendarEvent
 
+c = CalendarEvent('lehrer', '/json_files/lehr.json', 'lehrercal3@gmail.com')
+# c = CalendarEvent('khabib', '/json_files/khabib.json', 'en.pk#holiday@group.v.calendar.google.com')
 
-# d = datetime(2022, 5, 17)
+d = datetime(2022, 5, 23)
 
-# a = get_temperature(d)
-# for i in range(14):
-#     a = get_temperature(d + timedelta(days=i))
-#     print(d + timedelta(days=i))
-#     print(a)
+start_date = datetime(2022, 5, 23, 2)
+end_date = datetime(2022, 5, 23, 6)
+x, y = c.get_event_detail(start_date, end_date, False, [], d, True, 'go walk')
+print(x)
+print(y)
 
-
-dictionary = [{'Temperature': 'yes', 'x1': 45, 'x2': 23}, {'Low tide': 'yes', 'x1': 5, 'x2': 6}, {
-    'Sunset': 'yes', 'x1': 34, 'x2': 33}, {'Sunrise': 'yes', 'x1': 7, 'x2': 7}, {'Window': 'no', 'x1': 22, 'x2': 52}]
-if any(['Temperature' in _dict for _dict in dictionary]):
-    values = [(value.get('x1'), value.get('x2'))
-            for value in dictionary if value.get('Temperature')][0]
-    print(values)
-    print('logic goes here')

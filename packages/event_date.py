@@ -46,8 +46,18 @@ class CalendarEvent(object):
 
         try:
             events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMin= start.isoformat(), timeMax = end.isoformat()).execute()
-            if len(events) > 0:
+            print(len(events['items']))
+            if len(events['items']) > 0:
                 event_ids = [event['id'] for event in events['items']]
+                event_names = [event['summary'] for event in events['items']]
+                if apply_snooze:
+                    if len(snooze_days) > 0:
+                        if next_day.strftime('%A') in snooze_days:
+                            if title in event_names:
+                                return None, True
+                    else:
+                        if title in event_names:
+                            return None, True
                 free_date_ranges = []
                 busy_date_ranges = []
                 free_event_names = []
@@ -55,38 +65,29 @@ class CalendarEvent(object):
                 for e in event_ids:
                     single_event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
                     event_name = single_event['summary']
-
-                    if not event['start'].get('dateTime'):
-                        return [(startDate, endDate)], [event_name]
-
-                    if event['start'].get('dateTime') and event['end'].get('dateTime'):
-                        x = datetime.strptime(event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
-                        y = datetime.strptime(event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
-
-                        xi = datetime.combine(startDate.date(), x.time())
-                        yi = datetime.combine(endDate.date(), y.time()) 
-
-
-                    if 'transparency' not in event:
-
-                        busy_date_ranges.append((xi, yi))
+                    if not single_event['start'].get('dateTime'):
+                        return None, False
+                    if single_event['start'].get('dateTime') and single_event['end'].get('dateTime'):
+                        x = datetime.strptime(single_event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+                        y = datetime.strptime(single_event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
+                        x = datetime.combine(start_date.date(), x.time())
+                        y = datetime.combine(end_date.date(), y.time()) 
+                    if 'transparency' not in single_event:
+                        busy_date_ranges.append((x, y))
                         busy_event_names.append(event_name)
                     
-                    if 'transparency' in event:
-
-                        free_date_ranges.append((xi, yi))
+                    if 'transparency' in single_event:
+                        free_date_ranges.append((x, y))
                         free_event_names.append(event_name)
                         
                 if include_free_event is True:
-
                     date_range = free_date_ranges + busy_date_ranges
                     event_names = free_event_names + busy_event_names
-                    return list(set(sorted(date_range))), event_names
-
+                    return list(set(sorted(date_range))), False
                 if include_free_event is False:
-                    return list(set(sorted(busy_date_ranges))), busy_event_names
+                    return list(set(sorted(busy_date_ranges))), False
             else:
-                return ((start_date, end_date), False)
+                return [(start_date, end_date)], False
             
         except Exception as e:
             print('error: ', e)

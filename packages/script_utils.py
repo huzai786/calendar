@@ -35,7 +35,6 @@ def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, ti
         can_be = []                
         not_be = []
         possible_dates = []
-        print(event_names)
         for i, v in enumerate(zip(eventStarts[1:], eventEnds[:-1])):
             if v[0] > v[1]:
                 gap = v[0] - v[1]

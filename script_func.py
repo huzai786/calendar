@@ -65,7 +65,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append(time_range)
+                    if time_range is not None: time_ranges.append([time_range])
 
 
                 if any(['Sunrise' in _dict for _dict in filter_data]):
@@ -75,7 +75,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append(time_range)
+                    if time_range is not None: time_ranges.append([time_range])
 
 
                 if any(['Sunset' in _dict for _dict in filter_data]):
@@ -85,7 +85,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append(time_range)
+                    if time_range is not None: time_ranges.append([time_range])
                     
                 slot_msg = ret_time_slot(time_ranges, event_duration)
                 initial_date += timedelta(days=1)
