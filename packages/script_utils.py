@@ -5,7 +5,6 @@ def add_msg(date, msg):
         f.write(msg)
 
 
-
 def get_event_duration(event_duration, event_duration_type):
     if event_duration_type == 'Hour':
         event_duration = round(event_duration * 60, 2)
@@ -14,7 +13,6 @@ def get_event_duration(event_duration, event_duration_type):
     else:
         event_duration = event_duration
     return event_duration
-
 
 
 def get_snooze_duration(snooze_duration, snooze_type):
@@ -27,18 +25,13 @@ def get_snooze_duration(snooze_duration, snooze_type):
     return snooze_duration
 
 
-
 def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, title, snooze_check, snooze_days, start_date):
     if date_ranges != []:
         date_ranges = sorted(date_ranges)
-        print('date_ranges', date_ranges)
         eventStarts = [i[0] for i in date_ranges]
         eventEnds = [i[1] for i in date_ranges]
         firstEvent = eventStarts[0]
         lastEvent = eventEnds[-1]
-        print('startTime', startTime)
-        print('firstEvent', firstEvent)
-        print(firstEvent - startTime)
         can_be = []                
         not_be = []
         possible_dates = []
@@ -77,7 +70,6 @@ def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, ti
                     return None, False
                 
         else:
-            print('end part')
             return None, False 
     if date_ranges is None:
         return startTime, False

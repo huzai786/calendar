@@ -19,7 +19,7 @@ class CalendarEvent(object):
         self.token_url = token_url 
         self.calender_id = calender_id 
 
-    def calendar_event_func(self, startDate, endDate, include_free_event):
+    def get_event_detail(self, start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title):
         creds = None
         path = f'media/{self.name}_token.json'
         if os.path.exists(path):
@@ -36,93 +36,25 @@ class CalendarEvent(object):
                 flow = InstalledAppFlow.from_client_secrets_file(
                     f'media/{self.token_url}', self.SCOPES)
                 creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
             with open(f'media/{self.name}_token.json', 'w') as token:
-                token.write(creds.to_json()) 
+                token.write(creds.to_json())
         page_token = None
         service = build('calendar', 'v3', credentials=creds)
         myTimeZone = pytz.timezone('US/Pacific')
-        start = myTimeZone.localize(startDate)
-        end = myTimeZone.localize(endDate)
-        try:
-            Events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
-            events = [(event['summary']) for event in Events['items']]
-            event_ids = [(event['id']) for event in Events['items']]
-            
-            if len(events) != 0:
-                free_event_names = []
-                busy_event_names = []
-                for e in event_ids:
-                    event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
-                    
-                    if not event['start'].get('dateTime'):
-                        return True, [event['summary']]
-
-                    if 'transparency' not in event:
-                        busy_event_names.append(event['summary'])
-
-                    if 'transparency' in event:
-                        free_event_names.append(event['summary'])
-
-                if include_free_event is True:
-                    event_names = free_event_names + busy_event_names
-                    if len(event_names) != 0:
-                        return True, event_names
-
-                    else:
-                        return None, []
-
-                if include_free_event is False:
-                    if len(busy_event_names) != 0:
-                        return True, busy_event_names
-
-                    else:
-                        return None, []
-
-            return None, []
-
-        except Exception as e:
-            print('error: ', e)
-
-    def get_event_detail(self, startDate, endDate, include_free_event):
-        creds = None
-        path = f'media/{self.name}_token.json'
-        if os.path.exists(path):
-            creds = Credentials.from_authorized_user_file(path, self.SCOPES)
-        if not creds or not creds.valid:
-
-            if creds and creds.expired and creds.refresh_token:
-                try:
-                    creds.refresh(Request())
-                except Exception as e:
-                    os.remove(path)
-                    sys.exit()
-                    
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    f'media/{self.token_url}', self.SCOPES)
-                creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-            with open(f'media/{self.name}_token.json', 'w') as token:
-                token.write(creds.to_json()) 
-        
-        page_token = None
-        service = build('calendar', 'v3', credentials=creds)
-        myTimeZone = pytz.timezone('US/Pacific')
-        start = myTimeZone.localize(startDate)
-        end = myTimeZone.localize(endDate)
+        start = myTimeZone.localize(start_date)
+        end = myTimeZone.localize(end_date)
 
         try:
-            events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMax = end.isoformat(), timeMin= start.isoformat()).execute()
-            events = [event['id'] for event in events['items']]
-            if len(events) != 0:
+            events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMin= start.isoformat(), timeMax = end.isoformat()).execute()
+            if len(events) > 0:
+                event_ids = [event['id'] for event in events['items']]
                 free_date_ranges = []
                 busy_date_ranges = []
                 free_event_names = []
                 busy_event_names = []
-                for e in events:
-                    event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
-                    event_name = event['summary']
+                for e in event_ids:
+                    single_event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
+                    event_name = single_event['summary']
 
                     if not event['start'].get('dateTime'):
                         return [(startDate, endDate)], [event_name]
@@ -154,7 +86,7 @@ class CalendarEvent(object):
                 if include_free_event is False:
                     return list(set(sorted(busy_date_ranges))), busy_event_names
             else:
-                return (None, [])
+                return ((start_date, end_date), False)
             
         except Exception as e:
             print('error: ', e)
