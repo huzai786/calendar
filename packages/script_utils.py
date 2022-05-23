@@ -32,9 +32,6 @@ def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, ti
         eventEnds = [i[1] for i in date_ranges]
         firstEvent = eventStarts[0]
         lastEvent = eventEnds[-1]
-        can_be = []                
-        not_be = []
-        possible_dates = []
         for i, v in enumerate(zip(eventStarts[1:], eventEnds[:-1])):
             if v[0] > v[1]:
                 gap = v[0] - v[1]
@@ -54,21 +51,38 @@ def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, ti
         
         if duration < (endTime - lastEvent):
             return lastEvent, False
-        
-        if snooze_check is True:
-            if snooze_days == []:
-                if title in event_names:
-                    return None, True
-                else:
-                    return None, False  
-                
-            if snooze_days != []:
-                if title in event_names and (start_date.strftime('%A') in snooze_days):
-                    return None, True
-                else:
-                    return None, False
-                
         else:
-            return None, False 
-    if date_ranges is None:
-        return startTime, False
+            return None, False
+
+
+def snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names):
+    if include_free_event:
+        if len(snooze_days) > 0:
+            if next_day.strftime('%A') in snooze_days:
+                if title in free_event_names + busy_event_names:
+                    return None, True
+        else:
+            if title in free_event_names + busy_event_names:
+                return None, True
+    else:
+        if len(snooze_days) > 0:
+            if next_day.strftime('%A') in snooze_days:
+                if title in busy_event_names:
+                    return None, True
+        else:
+            if title in busy_event_names:
+                return None, True
+
+
+def time_gaps(start_date, date_ranges, end_date):
+    gaps = []
+    date_ranges = sorted(date_ranges)
+    eventStarts = [i[0] for i in date_ranges]
+    eventEnds = [i[1] for i in date_ranges]
+    if eventStarts[0] - start_date > 0:
+        gaps.append((eventStarts[0], start_date))
+    if end_date - eventEnds[-1] > 0:
+        gaps.append((eventEnds[-1], end_date))
+    for i, v in enumerate(zip(eventStarts[1:], eventEnds[:-1])):
+        if v[1] - v[0] > 0:
+            gaps.append((v[0], v[1]))

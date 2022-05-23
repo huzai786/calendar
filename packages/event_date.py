@@ -2,13 +2,14 @@ from __future__ import print_function
 
 import os.path
 import os
+import pytz
+import sys
+from datetime import datetime
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-import pytz
-import sys
-from datetime import datetime 
+from packages.script_utils import snooze_value, time_gaps
 
 
 class CalendarEvent(object):
@@ -49,15 +50,6 @@ class CalendarEvent(object):
             print(len(events['items']))
             if len(events['items']) > 0:
                 event_ids = [event['id'] for event in events['items']]
-                event_names = [event['summary'] for event in events['items']]
-                if apply_snooze:
-                    if len(snooze_days) > 0:
-                        if next_day.strftime('%A') in snooze_days:
-                            if title in event_names:
-                                return None, True
-                    else:
-                        if title in event_names:
-                            return None, True
                 free_date_ranges = []
                 busy_date_ranges = []
                 free_event_names = []
@@ -75,17 +67,23 @@ class CalendarEvent(object):
                     if 'transparency' not in single_event:
                         busy_date_ranges.append((x, y))
                         busy_event_names.append(event_name)
-                    
                     if 'transparency' in single_event:
                         free_date_ranges.append((x, y))
                         free_event_names.append(event_name)
-                        
-                if include_free_event is True:
+
+                if apply_snooze: 
+                    time_range, snooze_check = snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names)
+                    return time_range, snooze_check
+
+                if include_free_event:
                     date_range = free_date_ranges + busy_date_ranges
-                    event_names = free_event_names + busy_event_names
-                    return list(set(sorted(date_range))), False
-                if include_free_event is False:
-                    return list(set(sorted(busy_date_ranges))), False
+                    time_ranges = time_gaps(start_date, date_range, end_date)
+                    return list(set(sorted(time_ranges))), False
+
+                if not include_free_event:
+                    time_ranges = time_gaps(start_date, busy_date_ranges, end_date)
+                    return list(set(sorted(time_ranges))), False
+
             else:
                 return [(start_date, end_date)], False
             
