@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime 
 #  UTILITIES
 
 def add_msg(date, msg):
@@ -79,10 +80,12 @@ def time_gaps(start_date, date_ranges, end_date):
     date_ranges = sorted(date_ranges)
     eventStarts = [i[0] for i in date_ranges]
     eventEnds = [i[1] for i in date_ranges]
-    if eventStarts[0] - start_date > 0:
-        gaps.append((eventStarts[0], start_date))
-    if end_date - eventEnds[-1] > 0:
-        gaps.append((eventEnds[-1], end_date))
+    if eventStarts[0] - start_date > timedelta(minutes=0):
+        gaps.append((start_date, eventStarts[0]))
+    if end_date - eventEnds[-1] > timedelta(minutes=0):
+        gaps.append((end_date, eventEnds[-1]))
     for i, v in enumerate(zip(eventStarts[1:], eventEnds[:-1])):
-        if v[1] - v[0] > 0:
+        if v[1] - v[0] > timedelta(minutes=0):
             gaps.append((v[0], v[1]))
+            
+    return gaps

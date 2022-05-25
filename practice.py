@@ -8,7 +8,7 @@ c = CalendarEvent('lehrer', '/json_files/lehr.json', 'lehrercal3@gmail.com')
 d = datetime(2022, 5, 23)
 
 start_date = datetime(2022, 5, 23, 2)
-end_date = datetime(2022, 5, 23, 6)
+end_date = datetime(2022, 5, 23, 9)
 x, y = c.get_event_detail(start_date, end_date, False, [], d, True, 'go walk')
 print(x)
 print(y)

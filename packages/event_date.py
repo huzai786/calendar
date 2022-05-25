@@ -55,8 +55,10 @@ class CalendarEvent(object):
                 free_event_names = []
                 busy_event_names = []
                 for e in event_ids:
+                    print(e)
                     single_event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
                     event_name = single_event['summary']
+                    print(event_name)
                     if not single_event['start'].get('dateTime'):
                         return None, False
                     if single_event['start'].get('dateTime') and single_event['end'].get('dateTime'):
@@ -64,6 +66,7 @@ class CalendarEvent(object):
                         y = datetime.strptime(single_event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
                         x = datetime.combine(start_date.date(), x.time())
                         y = datetime.combine(end_date.date(), y.time()) 
+                        print(single_event)
                     if 'transparency' not in single_event:
                         busy_date_ranges.append((x, y))
                         busy_event_names.append(event_name)
@@ -73,16 +76,18 @@ class CalendarEvent(object):
 
                 if apply_snooze: 
                     time_range, snooze_check = snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names)
+                    
                     return time_range, snooze_check
 
                 if include_free_event:
                     date_range = free_date_ranges + busy_date_ranges
                     time_ranges = time_gaps(start_date, date_range, end_date)
-                    return list(set(sorted(time_ranges))), False
+                    
+                    return list(sorted(time_ranges)), False
 
                 if not include_free_event:
                     time_ranges = time_gaps(start_date, busy_date_ranges, end_date)
-                    return list(set(sorted(time_ranges))), False
+                    return list(sorted(time_ranges)), False
 
             else:
                 return [(start_date, end_date)], False
