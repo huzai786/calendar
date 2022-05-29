@@ -15,7 +15,6 @@ from packages.filters import (
 
 def main_func(title, days_to_look, calender_ids, days, filter_data, event_duration,
             snooze_duration, apply_snooze, snooze_days, include_free_event):
-    print(event_duration)
     event_in_all_cal_msg = ''
     for i in calender_ids:
         path = i.get('token_url')
@@ -49,7 +48,6 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                 if any(['Window' in _dict.values() for _dict in filter_data]):
                     values = [(v.get('x1'), v.get('x2')) for v in filter_data if 'Window' in v.values()][0]
                     time_range, snooze_check = window_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event)
-                    
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
@@ -86,10 +84,8 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if time_range is not None: time_ranges.append([time_range])
                     
                 slot_msg = ret_time_slot(time_ranges, event_duration)
-                print(slot_msg)
-                initial_date += timedelta(days=1)
-                
                 possible_date_message += str(slot_msg) + '\n\n'
+            initial_date += timedelta(days=1)
                 
         event_in_all_cal_msg += possible_date_message 
         

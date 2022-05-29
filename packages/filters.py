@@ -55,7 +55,7 @@ def window_filter(values, title, calendar, event_duration, apply_snooze, snooze_
         start_date = datetime.combine(next_day.date(), x.time())
         end_date = datetime.combine(next_day.date(), y.time())
         time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
-        
+        print('time_gaps sorted: ', time_range)
         return (time_range, snooze_check)
 
 
@@ -120,24 +120,34 @@ def sunset_filter(values, title, calendar, event_duration, apply_snooze, snooze_
 def lowtide_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event):
     """Function that return datetime of the low tide of the input date"""
     tide_info = get_lowtide(next_day)
-    print('event_duration', type(event_duration))
-    if values[0] is not None and values[1] is None:
-        start_date = tide_info - timedelta(minutes=values[0]) - timedelta(minutes=event_duration)
-        end_date = tide_info - timedelta(minutes=values[0])
-        time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
+    time_ranges = []
+    snooze_check = False
+    
+    for time in tide_info:
         
-        return (time_range, snooze_check)
+        if values[0] is not None and values[1] is None:
+            print(123)
+            start_date = time - timedelta(minutes=values[0]) - timedelta(minutes=event_duration)
+            end_date = time - timedelta(minutes=values[0])
+            time_range, snooze_response = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
+            time_ranges.append(time_range)
+            snooze_check = snooze_response
 
-    if values[1] is not None and values[0] is None:
-        start_date = tide_info + timedelta(minutes=values[1])
-        end_date = tide_info + timedelta(minutes=values[1]) + timedelta(minutes=event_duration)        
-        time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
-        
-        return (time_range, snooze_check)
+        if values[1] is not None and values[0] is None:
+            start_date = time + timedelta(minutes=values[1])
+            end_date = time + timedelta(minutes=values[1]) + timedelta(minutes=event_duration)        
+            time_range, snooze_response = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
+            time_ranges.append(time_range)
+            snooze_check = snooze_response
 
-    if values[1] is not None and values[0] is not None:
-        startDate = tide_info - timedelta(minutes=values[0])
-        endDate = tide_info + timedelta(minutes=values[1])
-        time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
-        
-        return (time_range, snooze_check)
+        if values[1] is not None and values[0] is not None:
+            startDate = time - timedelta(minutes=values[0])
+            endDate = time + timedelta(minutes=values[1])
+            time_range, snooze_response = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
+            time_ranges.append(time_range)
+            snooze_check = snooze_response
+    times = list()
+    for rang in time_ranges:
+        times += rang
+    print(times)
+    return times, snooze_check

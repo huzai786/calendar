@@ -44,10 +44,10 @@ class CalendarEvent(object):
         myTimeZone = pytz.timezone('US/Pacific')
         start = myTimeZone.localize(start_date)
         end = myTimeZone.localize(end_date)
-
         try:
             events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMin= start.isoformat(), timeMax = end.isoformat()).execute()
             if len(events['items']) > 0:
+                should_apply_snooze = None
                 event_ids = [event['id'] for event in events['items']]
                 free_date_ranges = []
                 busy_date_ranges = []
@@ -56,8 +56,8 @@ class CalendarEvent(object):
                 for e in event_ids:
                     single_event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
                     event_name = single_event['summary']
-                    print(event_name)
                     if not single_event['start'].get('dateTime'):
+                        print('extended event', event_name)
                         return None, False
                     if single_event['start'].get('dateTime') and single_event['end'].get('dateTime'):
                         x = datetime.strptime(single_event['start'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
@@ -72,14 +72,18 @@ class CalendarEvent(object):
                         free_event_names.append(event_name)
 
                 if apply_snooze: 
-                    time_range, snooze_check = snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names)
+                    print('yes apply_snooze is true')
+                    snooze_check = snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names)
+                    print(snooze_check)
+                    should_apply_snooze = snooze_check
                     
-                    return time_range, snooze_check
-
+                if should_apply_snooze is True:
+                        return None, True
+                    
                 if include_free_event:
-                    date_range = free_date_ranges + busy_date_ranges
+                    print('include_free_event is true')
+                    date_range = list(sorted(free_date_ranges + busy_date_ranges))
                     time_ranges = time_gaps(start_date, date_range, end_date)
-                    
                     return list(sorted(time_ranges)), False
 
                 if not include_free_event:

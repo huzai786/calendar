@@ -28,8 +28,8 @@ keyword = (
 class Filter(models.Model):
     filter_detail = models.CharField('Filter Detail', max_length=300, null=True)
     keyword = models.CharField(max_length=30, choices=keyword)
-    X1 = models.CharField('value to set(X1)', max_length=200, null=True, blank=True)
-    X2 = models.CharField('value to set(X2)', max_length=200, null=True, blank=True)
+    X1 = models.CharField('value to set(X1)', max_length=200, null=True, blank=True, help_text = "Please use 12-hour clock if Window is selected")
+    X2 = models.CharField('value to set(X2)', max_length=200, null=True, blank=True, help_text = "X2 should be greater than X1")
 
 
     def __str__(self):
