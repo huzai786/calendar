@@ -39,18 +39,18 @@ class Filter(models.Model):
         verbose_name_plural = "FIlters"
 
 class EventDetails(models.Model):
-    title = models.CharField(max_length=200)
-    days_to_look = models.IntegerField(null=True)
-    days = MultiSelectField(choices=day_choices, null=True)
+    title = models.CharField(max_length=200, help_text = "Event Title")
+    days_to_look = models.IntegerField(null=True, help_text = "Number of days to look")
+    days = MultiSelectField(choices=day_choices, null=True, help_text = "Days to look at")
     free_event = models.BooleanField('include free events?', default=True)
-    event_duration_type = models.CharField(max_length=100, choices=event_duration_choice)
-    event_duration = models.IntegerField()
-    apply_snooze = models.BooleanField(default=True) 
-    snooze_type = models.CharField(max_length=100, choices=event_duration_choice)
-    snooze_duration = models.IntegerField()
-    snooze_days = MultiSelectField(choices=day_choices, null=True, blank=True)
-    filter = models.ManyToManyField(Filter)
-    calenders = models.ManyToManyField('Calenders')
+    event_duration_type = models.CharField(max_length=100, choices=event_duration_choice, help_text = "Days / Hours / Minutes")
+    event_duration = models.IntegerField( help_text = "X2 should be greater than X1")
+    apply_snooze = models.BooleanField(default=True, help_text = "Apply snooze") 
+    snooze_type = models.CharField(max_length=100, choices=event_duration_choice, help_text = "Days / Hours / Minutes")
+    snooze_duration = models.IntegerField(help_text = "Duration for the snooze")
+    snooze_days = MultiSelectField(choices=day_choices, null=True, blank=True, help_text = "Snooze days (Optional)")
+    filter = models.ManyToManyField(Filter, help_text = "Choose Filter(s)")
+    calenders = models.ManyToManyField('Calenders', help_text = "Pick calendars to look into")
 
 
     def __str__(self):
