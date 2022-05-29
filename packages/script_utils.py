@@ -89,3 +89,7 @@ def time_gaps(start_date, date_ranges, end_date):
             gaps.append((v[0], v[1]))
             
     return gaps
+
+
+def ret_time_slot(time_ranges, event_duration):
+    return time_ranges

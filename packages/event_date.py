@@ -47,7 +47,6 @@ class CalendarEvent(object):
 
         try:
             events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMin= start.isoformat(), timeMax = end.isoformat()).execute()
-            print(len(events['items']))
             if len(events['items']) > 0:
                 event_ids = [event['id'] for event in events['items']]
                 free_date_ranges = []
@@ -55,7 +54,6 @@ class CalendarEvent(object):
                 free_event_names = []
                 busy_event_names = []
                 for e in event_ids:
-                    print(e)
                     single_event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
                     event_name = single_event['summary']
                     print(event_name)
@@ -66,7 +64,6 @@ class CalendarEvent(object):
                         y = datetime.strptime(single_event['end'].get('dateTime'), '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo = None)
                         x = datetime.combine(start_date.date(), x.time())
                         y = datetime.combine(end_date.date(), y.time()) 
-                        print(single_event)
                     if 'transparency' not in single_event:
                         busy_date_ranges.append((x, y))
                         busy_event_names.append(event_name)

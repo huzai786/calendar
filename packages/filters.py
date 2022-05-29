@@ -23,7 +23,7 @@ def temperature_filter(values, get_temp):
             
     if values[0] is not None and values[1] is not None:
         
-        if (get_temp >= tempx1) and (get_temp <= tempx2):
+        if (get_temp >= values[0]) and (get_temp <= values[1]):
             return True
         else:
             return False
@@ -47,9 +47,8 @@ def window_filter(values, title, calendar, event_duration, apply_snooze, snooze_
         time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
         
         return (time_range, snooze_check)
-        
-    if (values[0] is not None) and (values[1] is not None):
 
+    if (values[0] is not None) and (values[1] is not None):
         x = datetime.strptime(values[0], '%I:%M %p')
         y = datetime.strptime(values[1], '%I:%M %p')
 
@@ -121,10 +120,10 @@ def sunset_filter(values, title, calendar, event_duration, apply_snooze, snooze_
 def lowtide_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event):
     """Function that return datetime of the low tide of the input date"""
     tide_info = get_lowtide(next_day)
-
+    print('event_duration', type(event_duration))
     if values[0] is not None and values[1] is None:
-        start_date = tide_info - timedelta(minutes=lowtide1) - timedelta(minutes=event_duration)
-        end_date = tide_info - timedelta(minutes=lowtide1)
+        start_date = tide_info - timedelta(minutes=values[0]) - timedelta(minutes=event_duration)
+        end_date = tide_info - timedelta(minutes=values[0])
         time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
         
         return (time_range, snooze_check)

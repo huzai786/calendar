@@ -2,7 +2,8 @@ from datetime import datetime, timedelta
 from packages.temp import get_temperature
 from packages.event_date import CalendarEvent
 from packages.check_filter import set_filters
-from packages.return_time import ret_time_slot
+from packages.script_utils import ret_time_slot
+
 from packages.filters import (
     temperature_filter,
     lowtide_filter,
@@ -14,7 +15,7 @@ from packages.filters import (
 
 def main_func(title, days_to_look, calender_ids, days, filter_data, event_duration,
             snooze_duration, apply_snooze, snooze_days, include_free_event):
-
+    print(event_duration)
     event_in_all_cal_msg = ''
     for i in calender_ids:
         path = i.get('token_url')
@@ -26,7 +27,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
         days_searched = 0
         date = datetime.now().strftime('%Y-%m-%d')
         initial_date = datetime.strptime(date, '%Y-%m-%d')
-        
+        print(filter_data)
         while True:
             temp_check = None
             time_ranges = []
@@ -35,21 +36,18 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
             next_day = initial_date.replace(hour=0, minute=0)
             if next_day.strftime('%A') in days:
                 days_searched += 1
-                
-                if any(['Temperature' in _dict for _dict in filter_data]):
-                    values = [(value.get('x1'), value.get('x2'))
-                            for value in dictionary if value.get('Temperature')][0]
+                if any(['Temperature' in _dict.values() for _dict in filter_data]):
+                    values = [(v.get('x1'), v.get('x2')) for v in filter_data if 'Temperature' in v.values()][0]
                     temperature = get_temperature(next_day)
-                    get_temp = (temperature * 9/5) + 32
+                    get_temp = str((temperature * 9/5) + 32)
                     temp_check = temperature_filter(values, get_temp)
                     if temp_check is False:
                         initial_date += initial_date + timedelta(days=1)
                         continue
 
 
-                if any(['Window' in _dict for _dict in filter_data]):
-                    values = [(value.get('x1'), value.get('x2'))
-                            for value in dictionary if value.get('Window')][0]
+                if any(['Window' in _dict.values() for _dict in filter_data]):
+                    values = [(v.get('x1'), v.get('x2')) for v in filter_data if 'Window' in v.values()][0]
                     time_range, snooze_check = window_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event)
                     
                     if snooze_check is True:
@@ -58,9 +56,9 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if time_range is not None: time_ranges.append(time_range)
 
 
-                if any(['Low Tide' in _dict for _dict in filter_data]):
-                    values = [(value.get('x1'), value.get('x2'))
-                            for value in dictionary if value.get('Low Tide')][0]
+                if any(['Low Tide' in _dict.values() for _dict in filter_data]):
+                    values = [(v.get('x1'), v.get('x2')) for v in filter_data if 'Low Tide' in v.values()][0]
+                    values = tuple(int(v) if v is not None else None for v in values)
                     time_range, snooze_check = lowtide_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event)
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
@@ -68,9 +66,9 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if time_range is not None: time_ranges.append([time_range])
 
 
-                if any(['Sunrise' in _dict for _dict in filter_data]):
-                    values = [(value.get('x1'), value.get('x2'))
-                            for value in dictionary if value.get('Sunrise')][0]
+                if any(['Sunrise' in _dict.values() for _dict in filter_data]):
+                    values = [(v.get('x1'), v.get('x2')) for v in filter_data if 'Sunrise' in v.values()][0]
+                    values = tuple(int(v) if v is not None else None for v in values)
                     time_range, snooze_check = sunrise_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event)
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
@@ -78,9 +76,9 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if time_range is not None: time_ranges.append([time_range])
 
 
-                if any(['Sunset' in _dict for _dict in filter_data]):
-                    values = [(value.get('x1'), value.get('x2'))
-                            for value in dictionary if value.get('Sunset')][0]
+                if any(['Sunset' in _dict.values() for _dict in filter_data]):
+                    values = [(v.get('x1'), v.get('x2')) for v in filter_data if 'Sunset' in v.values()][0]
+                    values = tuple(int(v) if v is not None else None for v in values)
                     time_range, snooze_check = sunset_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event)
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
@@ -88,11 +86,12 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if time_range is not None: time_ranges.append([time_range])
                     
                 slot_msg = ret_time_slot(time_ranges, event_duration)
+                print(slot_msg)
                 initial_date += timedelta(days=1)
                 
-                possible_date_message += slot_msg
+                possible_date_message += str(slot_msg) + '\n\n'
                 
-        event_in_all_cal_msg += possible_date_message
+        event_in_all_cal_msg += possible_date_message 
         
     return event_in_all_cal_msg
 
