@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from packages.script_utils import snooze_value, time_gaps
+from packages.script_utils import snooze_value, time_gaps, merge_range
 
 
 class CalendarEvent(object):
@@ -72,23 +72,22 @@ class CalendarEvent(object):
                         free_event_names.append(event_name)
 
                 if apply_snooze: 
-                    print('yes apply_snooze is true')
                     snooze_check = snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names)
-                    print(snooze_check)
                     should_apply_snooze = snooze_check
                     
                 if should_apply_snooze is True:
-                        return None, True
-                    
+                    return None, True
+
                 if include_free_event:
-                    print('include_free_event is true')
-                    date_range = list(sorted(free_date_ranges + busy_date_ranges))
-                    time_ranges = time_gaps(start_date, date_range, end_date)
-                    return list(sorted(time_ranges)), False
+                    date_range = free_date_ranges + busy_date_ranges
+                    truncated_ranges = list(merge_range(date_range))
+                    time_ranges = time_gaps(start_date, truncated_ranges, end_date)
+                    return sorted(time_ranges), False
 
                 if not include_free_event:
-                    time_ranges = time_gaps(start_date, busy_date_ranges, end_date)
-                    return list(sorted(time_ranges)), False
+                    truncated_ranges = list(merge_range(busy_date_ranges))
+                    time_ranges = time_gaps(start_date, truncated_ranges, end_date)
+                    return sorted(time_ranges), False
 
             else:
                 return [(start_date, end_date)], False

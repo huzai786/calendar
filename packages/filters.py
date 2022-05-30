@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from packages.sunriset import ZipInfo
 from packages.lowtide import get_lowtide
-from packages.script_utils import findFirstOpenSlot
 
 
 
@@ -55,7 +54,6 @@ def window_filter(values, title, calendar, event_duration, apply_snooze, snooze_
         start_date = datetime.combine(next_day.date(), x.time())
         end_date = datetime.combine(next_day.date(), y.time())
         time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
-        print('time_gaps sorted: ', time_range)
         return (time_range, snooze_check)
 
 
@@ -79,11 +77,11 @@ def sunrise_filter(values, title, calendar, event_duration, apply_snooze, snooze
         
         return (time_range, snooze_check)
 
-    if values[0] is not None and values[1] is not None:
+    if (values[0] is not None) and (values[1] is not None):
         startDate = get_sunrise_info - timedelta(minutes=values[0])
         endDate = get_sunrise_info + timedelta(minutes=values[1])
-        time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
-        
+        time_range, snooze_check = calendar.get_event_detail(startDate, endDate, apply_snooze, snooze_days, next_day, include_free_event, title)
+        print('sunrise_filter', time_range)
         return (time_range, snooze_check)
 
 
@@ -109,11 +107,11 @@ def sunset_filter(values, title, calendar, event_duration, apply_snooze, snooze_
         
         return (time_range, snooze_check)
 
-    if values[1] is not None and values[0] is not None:
+    if (values[1] is not None) and (values[0] is not None):
         startDate = get_sunset_info - timedelta(minutes=values[0])
         endDate = get_sunset_info + timedelta(minutes=values[1])
-        time_range, snooze_check = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
-        
+        time_range, snooze_check = calendar.get_event_detail(startDate, endDate, apply_snooze, snooze_days, next_day, include_free_event, title)
+        print('sunset_filter', time_range)
         return (time_range, snooze_check)
 
 
@@ -126,7 +124,6 @@ def lowtide_filter(values, title, calendar, event_duration, apply_snooze, snooze
     for time in tide_info:
         
         if values[0] is not None and values[1] is None:
-            print(123)
             start_date = time - timedelta(minutes=values[0]) - timedelta(minutes=event_duration)
             end_date = time - timedelta(minutes=values[0])
             time_range, snooze_response = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
@@ -143,11 +140,12 @@ def lowtide_filter(values, title, calendar, event_duration, apply_snooze, snooze
         if values[1] is not None and values[0] is not None:
             startDate = time - timedelta(minutes=values[0])
             endDate = time + timedelta(minutes=values[1])
-            time_range, snooze_response = calendar.get_event_detail(start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title)
+            time_range, snooze_response = calendar.get_event_detail(startDate, endDate, apply_snooze, snooze_days, next_day, include_free_event, title)
             time_ranges.append(time_range)
             snooze_check = snooze_response
-    times = list()
+    times = []
     for rang in time_ranges:
-        times += rang
+        print(rang[0])
+        times.append(rang[0])
     print(times)
     return times, snooze_check

@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from packages.temp import get_temperature
 from packages.event_date import CalendarEvent
-from packages.check_filter import set_filters
 from packages.script_utils import ret_time_slot
 
 from packages.filters import (
@@ -26,7 +25,6 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
         days_searched = 0
         date = datetime.now().strftime('%Y-%m-%d')
         initial_date = datetime.strptime(date, '%Y-%m-%d')
-        print(filter_data)
         while True:
             temp_check = None
             time_ranges = []
@@ -61,7 +59,10 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append([time_range])
+                    print(time_range)
+                    if time_range is not None: time_ranges.append(time_range)
+                        # for t in time_range:
+                        #     time_ranges.append(t)
 
 
                 if any(['Sunrise' in _dict.values() for _dict in filter_data]):
@@ -71,7 +72,10 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append([time_range])
+                    print(time_range)
+                    if time_range is not None:time_ranges.append(time_range)
+                        # for t in time_range:
+                        #     time_ranges.append(t)
 
 
                 if any(['Sunset' in _dict.values() for _dict in filter_data]):
@@ -81,12 +85,15 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append([time_range])
-                    
+                    print(time_range)
+                    if time_range is not None:time_ranges.append(time_range)
+                        # for t in time_range:
+                        #     time_ranges.append(t)
                 slot_msg = ret_time_slot(time_ranges, event_duration)
-                possible_date_message += str(slot_msg) + '\n\n'
+
+                possible_date_message += str(slot_msg) + '\n--------------------------------------------------------\n'
             initial_date += timedelta(days=1)
-                
+
         event_in_all_cal_msg += possible_date_message 
         
     return event_in_all_cal_msg

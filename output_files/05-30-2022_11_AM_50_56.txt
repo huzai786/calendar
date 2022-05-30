@@ -1,0 +1,4 @@
+Event: "go for a walk" 
+Calender = lehrer: lehrercal3@gmail.com
+[[(datetime.datetime(2022, 6, 2, 9, 0), datetime.datetime(2022, 6, 2, 9, 30)), (datetime.datetime(2022, 6, 2, 11, 0), datetime.datetime(2022, 6, 2, 12, 10))], [(datetime.datetime(2022, 6, 2, 5, 9), datetime.datetime(2022, 6, 2, 6, 56)), (datetime.datetime(2022, 6, 2, 15, 37), datetime.datetime(2022, 6, 2, 17, 24))], [(datetime.datetime(2022, 6, 2, 4, 41, 3), datetime.datetime(2022, 6, 2, 6, 33, 3))], [(datetime.datetime(2022, 6, 2, 20, 0), datetime.datetime(2022, 6, 2, 20, 23, 24))]]
+--------------------------------------------------------

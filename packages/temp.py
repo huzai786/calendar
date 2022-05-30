@@ -1,6 +1,5 @@
-from meteostat import Point, Hourly, Stations
+from meteostat import Point, Hourly
 from datetime import datetime, timedelta
-from pandas import compat
 
 #  + timedelta(days=2)
 def get_temp(date):
@@ -28,4 +27,4 @@ def get_temperature(date):
             continue
 
 if __name__ == '__main__':
-    get_temperature(date)
+    get_temperature()

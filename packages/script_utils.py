@@ -1,10 +1,5 @@
 from datetime import timedelta, datetime
 
-
-def truncate_time_range(time_ranges):
-    pass
-
-
 def add_msg(date, msg):
     with open(f'output_files/{date}.txt', 'w+') as f:
         f.write(msg)
@@ -28,36 +23,6 @@ def get_snooze_duration(snooze_duration, snooze_type):
     else:
         snooze_duration = snooze_duration
     return snooze_duration
-
-
-def findFirstOpenSlot(date_ranges, startTime, endTime, duration, event_names, title, snooze_check, snooze_days, start_date):
-    if date_ranges != []:
-        date_ranges = sorted(date_ranges)
-        eventStarts = [i[0] for i in date_ranges]
-        eventEnds = [i[1] for i in date_ranges]
-        firstEvent = eventStarts[0]
-        lastEvent = eventEnds[-1]
-        for i, v in enumerate(zip(eventStarts[1:], eventEnds[:-1])):
-            if v[0] > v[1]:
-                gap = v[0] - v[1]
-                if duration < gap:
-                    can_be.append(v[1])
-            else:
-                not_be.append(v[1])
-        for i, v in enumerate(can_be):
-            if any(v > x for x in not_be):
-                possible_dates.append(v)
-
-        if duration < (firstEvent - startTime):
-            return startTime, False
-
-        if len(possible_dates) != 0:
-            return possible_dates[0], False
-
-        if duration < (endTime - lastEvent):
-            return lastEvent, False
-        else:
-            return None, False
 
 
 def snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names):
@@ -88,21 +53,17 @@ def snooze_value(include_free_event, snooze_days, next_day, title, free_event_na
 
 
 def time_gaps(start_date, date_ranges, end_date):
-    date_ranges = truncate_time_range(date_ranges)
     gaps = []
-    
-    print('time_gaps', date_ranges)
     eventStarts = [i[0] for i in date_ranges]
     eventEnds = [i[1] for i in date_ranges]
     
     if eventStarts[0] - start_date > timedelta(minutes=0):
         gaps.append((start_date, eventStarts[0]))
-        
-    ranges = []
+    
     for v in zip(eventStarts[1:], eventEnds[:-1]):
         if v[1] < v[0]:
             gaps.append((v[1], v[0]))
-        
+    
     if end_date - eventEnds[-1] > timedelta(minutes=0):
         gaps.append((eventEnds[-1], end_date))
     return gaps
@@ -111,3 +72,17 @@ def time_gaps(start_date, date_ranges, end_date):
 def ret_time_slot(time_ranges, event_duration):
 
     return time_ranges
+
+
+def merge_range(ranges):
+    ranges = list(sorted(ranges, key= lambda x: x[0]))
+    saved = list(ranges[0])
+
+    for range_set in ranges:
+        if range_set[0] <= saved[1]:
+            saved[1] = max(saved[1], range_set[1])
+        else:
+            yield tuple(saved)
+            saved[0] = range_set[0]
+            saved[1] = range_set[1]
+    yield saved
