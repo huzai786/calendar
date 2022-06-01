@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from packages.temp import get_temperature
 from packages.event_date import CalendarEvent
-from packages.script_utils import ret_time_slot
+from packages.script_utils import reduce
 
 from packages.filters import (
     temperature_filter,
@@ -59,10 +59,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    print(time_range)
                     if time_range is not None: time_ranges.append(time_range)
-                        # for t in time_range:
-                        #     time_ranges.append(t)
 
 
                 if any(['Sunrise' in _dict.values() for _dict in filter_data]):
@@ -72,10 +69,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    print(time_range)
                     if time_range is not None:time_ranges.append(time_range)
-                        # for t in time_range:
-                        #     time_ranges.append(t)
 
 
                 if any(['Sunset' in _dict.values() for _dict in filter_data]):
@@ -85,13 +79,23 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    print(time_range)
                     if time_range is not None:time_ranges.append(time_range)
-                        # for t in time_range:
-                        #     time_ranges.append(t)
-                slot_msg = ret_time_slot(time_ranges, event_duration)
-
-                possible_date_message += str(slot_msg) + '\n--------------------------------------------------------\n'
+                duration_of_event = timedelta(minutes=event_duration)
+                print('time_ranges', time_ranges)
+                slot = reduce(time_ranges, minLength=duration_of_event)
+                print('slot', slot)
+                if slot != []:
+                    time = slot[0]
+                    start_time = time[0]
+                    start = start_time.strftime('%m-%d-%Y %I %p %M minutes')
+                    end_time = time[1]
+                    end = end_time.strftime('%m-%d-%Y %I %p %M minutes')
+                    time_msg = f'from {start} to {end}'
+                else:
+                    next_day = next_day.strftime('%m-%d-%Y')
+                    time_msg = f'no possible common time on {next_day}'
+                    
+                possible_date_message += time_msg + '\n--------------------------------------------------------\n'
             initial_date += timedelta(days=1)
 
         event_in_all_cal_msg += possible_date_message 

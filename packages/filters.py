@@ -81,7 +81,6 @@ def sunrise_filter(values, title, calendar, event_duration, apply_snooze, snooze
         startDate = get_sunrise_info - timedelta(minutes=values[0])
         endDate = get_sunrise_info + timedelta(minutes=values[1])
         time_range, snooze_check = calendar.get_event_detail(startDate, endDate, apply_snooze, snooze_days, next_day, include_free_event, title)
-        print('sunrise_filter', time_range)
         return (time_range, snooze_check)
 
 
@@ -111,7 +110,6 @@ def sunset_filter(values, title, calendar, event_duration, apply_snooze, snooze_
         startDate = get_sunset_info - timedelta(minutes=values[0])
         endDate = get_sunset_info + timedelta(minutes=values[1])
         time_range, snooze_check = calendar.get_event_detail(startDate, endDate, apply_snooze, snooze_days, next_day, include_free_event, title)
-        print('sunset_filter', time_range)
         return (time_range, snooze_check)
 
 
@@ -144,8 +142,8 @@ def lowtide_filter(values, title, calendar, event_duration, apply_snooze, snooze
             time_ranges.append(time_range)
             snooze_check = snooze_response
     times = []
+    if None in time_ranges:
+        return [], snooze_check
     for rang in time_ranges:
-        print(rang[0])
         times.append(rang[0])
-    print(times)
     return times, snooze_check

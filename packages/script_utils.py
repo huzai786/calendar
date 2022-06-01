@@ -69,10 +69,24 @@ def time_gaps(start_date, date_ranges, end_date):
     return gaps
 
 
-def ret_time_slot(time_ranges, event_duration):
+def findCommon(list1, list2, minLength=timedelta(minutes=0)):
+    newList = []
+    for range1 in list1:
+        for range2 in list2:
+            overlapStart = max(range1[0], range2[0]) # the latest start time
+            overlapEnd = min(range1[1], range2[1]) # the earliest end time
+            if overlapEnd - overlapStart >= minLength:
+                newList.append((overlapStart, overlapEnd))
+    return newList
 
-    return time_ranges
 
+def reduce(listOfLists, minLength=timedelta(minutes=0)):
+    if len(listOfLists) > 2:
+        return reduce([findCommon(listOfLists[0], listOfLists[1], minLength)] + listOfLists[2:], minLength)
+    elif len(listOfLists) == 2:
+        return findCommon(listOfLists[0], listOfLists[1], minLength)
+    else:
+        return listOfLists[0]
 
 def merge_range(ranges):
     ranges = list(sorted(ranges, key= lambda x: x[0]))
