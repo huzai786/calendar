@@ -80,7 +80,7 @@ def findCommon(list1, list2, minLength=timedelta(minutes=0)):
     return newList
 
 
-def reduce(listOfLists, minLength=timedelta(minutes=0)):
+def reduce(listOfLists, minLength):
     if len(listOfLists) > 2:
         return reduce([findCommon(listOfLists[0], listOfLists[1], minLength)] + listOfLists[2:], minLength)
     elif len(listOfLists) == 2:
@@ -88,10 +88,10 @@ def reduce(listOfLists, minLength=timedelta(minutes=0)):
     else:
         return listOfLists[0]
 
-def merge_range(ranges):
+
+def merge(ranges):
     ranges = list(sorted(ranges, key= lambda x: x[0]))
     saved = list(ranges[0])
-
     for range_set in ranges:
         if range_set[0] <= saved[1]:
             saved[1] = max(saved[1], range_set[1])
@@ -100,3 +100,9 @@ def merge_range(ranges):
             saved[0] = range_set[0]
             saved[1] = range_set[1]
     yield saved
+
+
+def merge_range(ranges):
+    range_output = list(merge(ranges))
+    range_output[-1] = tuple(range_output[-1])
+    return range_output

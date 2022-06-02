@@ -80,12 +80,12 @@ class CalendarEvent(object):
 
                 if include_free_event:
                     date_range = free_date_ranges + busy_date_ranges
-                    truncated_ranges = list(merge_range(date_range))
+                    truncated_ranges = merge_range(date_range)
                     time_ranges = time_gaps(start_date, truncated_ranges, end_date)
                     return sorted(time_ranges), False
 
                 if not include_free_event:
-                    truncated_ranges = list(merge_range(busy_date_ranges))
+                    truncated_ranges = merge_range(busy_date_ranges)
                     time_ranges = time_gaps(start_date, truncated_ranges, end_date)
                     return sorted(time_ranges), False
 

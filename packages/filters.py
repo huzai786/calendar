@@ -143,7 +143,7 @@ def lowtide_filter(values, title, calendar, event_duration, apply_snooze, snooze
             snooze_check = snooze_response
     times = []
     if None in time_ranges:
-        return [], snooze_check
+        return None, snooze_check
     for rang in time_ranges:
         times.append(rang[0])
     return times, snooze_check
