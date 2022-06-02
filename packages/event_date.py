@@ -53,6 +53,7 @@ class CalendarEvent(object):
                 busy_date_ranges = []
                 free_event_names = []
                 busy_event_names = []
+                
                 for e in event_ids:
                     single_event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
                     event_name = single_event['summary']
@@ -74,20 +75,28 @@ class CalendarEvent(object):
                 if apply_snooze: 
                     snooze_check = snooze_value(include_free_event, snooze_days, next_day, title, free_event_names, busy_event_names)
                     should_apply_snooze = snooze_check
-                    
-                if should_apply_snooze is True:
-                    return None, True
 
                 if include_free_event:
-                    date_range = free_date_ranges + busy_date_ranges
-                    truncated_ranges = merge_range(date_range)
-                    time_ranges = time_gaps(start_date, truncated_ranges, end_date)
-                    return sorted(time_ranges), False
+                    if should_apply_snooze is True:
+                        date_range = free_date_ranges + busy_date_ranges
+                        truncated_ranges = merge_range(date_range)
+                        time_ranges = time_gaps(start_date, truncated_ranges, end_date)
+                        return sorted(time_ranges), True
+                    else:
+                        date_range = free_date_ranges + busy_date_ranges
+                        truncated_ranges = merge_range(date_range)
+                        time_ranges = time_gaps(start_date, truncated_ranges, end_date)
+                        return sorted(time_ranges), False
 
                 if not include_free_event:
-                    truncated_ranges = merge_range(busy_date_ranges)
-                    time_ranges = time_gaps(start_date, truncated_ranges, end_date)
-                    return sorted(time_ranges), False
+                    if should_apply_snooze is True:
+                        truncated_ranges = merge_range(busy_date_ranges)
+                        time_ranges = time_gaps(start_date, truncated_ranges, end_date)
+                        return sorted(time_ranges), True
+                    else:
+                        truncated_ranges = merge_range(busy_date_ranges)
+                        time_ranges = time_gaps(start_date, truncated_ranges, end_date)
+                        return sorted(time_ranges), False
 
             else:
                 return [(start_date, end_date)], False

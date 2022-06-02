@@ -1,3 +1,0 @@
-Event: "Pickleball YMCA" 
-Calender = lehrer: lehrercal3@gmail.com
-==============================================
