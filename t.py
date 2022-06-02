@@ -17,3 +17,11 @@ end = datetime(2022, 6, 2, 17, 0)
 a = time_gaps(start, ranges[0], end)
 
 print(a)
+
+x = [
+    [
+        (datetime.datetime(2022, 6, 3, 5, 48), datetime.datetime(2022, 6, 3, 6, 0)), 
+        (datetime.datetime(2022, 6, 3, 16, 9), datetime.datetime(2022, 6, 3, 18, 9))
+    ]
+]
+

@@ -21,7 +21,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
         # Google calender from the id
         calendar = CalendarEvent(name, path, i.get('id'))
         calender_title = i.get('title')
-        possible_date_message = f'Event: "{title}" \nCalender = {name}: {calender_title}\n'
+        possible_date_message = f'Event: "{title}" \nCalender = {name}: {calender_title}\n==============================================\n'
         days_searched = 0
         date = datetime.now().strftime('%Y-%m-%d')
         initial_date = datetime.strptime(date, '%Y-%m-%d')
@@ -49,7 +49,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append(time_range)
+                    time_ranges.append(time_range)
 
 
                 if any(['Low Tide' in _dict.values() for _dict in filter_data]):
@@ -59,7 +59,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None: time_ranges.append(time_range)
+                    time_ranges.append(time_range)
 
 
                 if any(['Sunrise' in _dict.values() for _dict in filter_data]):
@@ -69,7 +69,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     if snooze_check is True:
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None:time_ranges.append(time_range)
+                    time_ranges.append(time_range)
 
 
                 if any(['Sunset' in _dict.values() for _dict in filter_data]):
@@ -77,23 +77,27 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                     values = tuple(int(v) if v is not None else None for v in values)
                     time_range, snooze_check = sunset_filter(values, title, calendar, event_duration, apply_snooze, snooze_days, next_day, include_free_event)
                     if snooze_check is True:
+                        days_searched -= 1
                         initial_date += timedelta(days=snooze_duration)
                         continue
-                    if time_range is not None:time_ranges.append(time_range)
+                    time_ranges.append(time_range)
                 duration_of_event = timedelta(minutes=event_duration)
                 print('time_ranges', time_ranges)
-                slot = reduce(time_ranges, minLength=duration_of_event)
-                print('slot', slot)
-                if slot != []:
-                    time = slot[0]
-                    start_time = time[0]
-                    start = start_time.strftime('%m-%d-%Y %I %p %M minutes')
-                    end_time = time[1]
-                    end = end_time.strftime('%m-%d-%Y %I %p %M minutes')
-                    time_msg = f'from {start} to {end}'
+                if None in time_ranges:
+                    time_msg = "extended event found"
                 else:
-                    next_day = next_day.strftime('%m-%d-%Y')
-                    time_msg = f'no possible common time on {next_day}'
+                    slot = reduce(time_ranges, minLength=duration_of_event)
+                    print('slot', slot)
+                    if slot != []:
+                        time = slot[0]
+                        start_time = time[0]
+                        start = start_time.strftime('%m-%d-%Y %I %p %M minutes')
+                        end_time = time[1]
+                        end = end_time.strftime('%m-%d-%Y %I %p %M minutes')
+                        time_msg = f'from {start} to {end}'
+                    else:
+                        next_day = next_day.strftime('%m-%d-%Y')
+                        time_msg = f'no possible common time on {next_day}'
                     
                 possible_date_message += time_msg + '\n--------------------------------------------------------\n'
             initial_date += timedelta(days=1)

@@ -28,8 +28,8 @@ keyword = (
 class Filter(models.Model):
     filter_detail = models.CharField('Filter Detail', max_length=300, null=True)
     keyword = models.CharField(max_length=30, choices=keyword)
-    X1 = models.CharField('value to set(X1)', max_length=200, null=True, blank=True, help_text = "Please use 12-hour clock if Window is selected")
-    X2 = models.CharField('value to set(X2)', max_length=200, null=True, blank=True, help_text = "X2 should be greater than X1")
+    X1 = models.CharField('value to set(X1)', max_length=200, null=True, blank=True, help_text = "if Window is selected Please use 12-hour clock and X2 should be greater than X1")
+    X2 = models.CharField('value to set(X2)', max_length=200, null=True, blank=True)
 
 
     def __str__(self):
@@ -44,7 +44,7 @@ class EventDetails(models.Model):
     days = MultiSelectField(choices=day_choices, null=True, help_text = "Days to look at")
     free_event = models.BooleanField('include free events?', default=True)
     event_duration_type = models.CharField(max_length=100, choices=event_duration_choice, help_text = "Days / Hours / Minutes")
-    event_duration = models.IntegerField( help_text = "X2 should be greater than X1")
+    event_duration = models.IntegerField()
     apply_snooze = models.BooleanField(default=True, help_text = "Apply snooze") 
     snooze_type = models.CharField(max_length=100, choices=event_duration_choice, help_text = "Days / Hours / Minutes")
     snooze_duration = models.IntegerField(help_text = "Duration for the snooze")

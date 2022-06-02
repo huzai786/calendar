@@ -85,8 +85,11 @@ def reduce(listOfLists, minLength):
         return reduce([findCommon(listOfLists[0], listOfLists[1], minLength)] + listOfLists[2:], minLength)
     elif len(listOfLists) == 2:
         return findCommon(listOfLists[0], listOfLists[1], minLength)
-    else:
-        return listOfLists[0]
+    if len(listOfLists) == 1:
+        for _range in listOfLists:
+            for i in _range:
+                if i[1] - i[0] > minLength:
+                    return [i]
 
 
 def merge(ranges):
