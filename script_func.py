@@ -92,6 +92,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                         initial_date += timedelta(days=snooze_duration)
                         continue
                     time_ranges.append(time_range)
+                
                 duration_of_event = timedelta(minutes=event_duration)
                 print('time_ranges', time_ranges)
                 if None in time_ranges:
@@ -106,7 +107,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                         end_time = time[1]
                         end = end_time.strftime('%m-%d-%Y %I %p %M minutes')
                         time_msg = f'from {start} to {end}'
-                    else:
+                    if slot is [] or slot is None:
                         next_day = next_day.strftime('%m-%d-%Y')
                         time_msg = f'no possible common time on {next_day}'
                     
