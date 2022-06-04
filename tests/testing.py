@@ -14,10 +14,5 @@ ranges = [
     [(datetime(2022, 6, 2, 9, 10), datetime(2022, 6, 2, 9, 20)), (datetime(2022, 6, 2, 20, 0), datetime(2022, 6, 2, 20, 23, 24))]
 ]
 duration = timedelta(minutes=30)
-# ranges = [     
-#     [(datetime(1,1,1,1,0), datetime(1,1,1,2,0)), (datetime(1,1,1,2,30), datetime(1,1,1,3,0))],
-#     [(datetime(1,1,1,1,20), datetime(1,1,1,3,0))],
-#     [(datetime(1,1,1,1,20), datetime(1,1,1,2, 55))]
-# ]
-# print(ranges[0])
+
 print(reduce([ranges[0]], duration))

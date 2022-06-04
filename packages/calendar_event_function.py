@@ -43,6 +43,9 @@ class CalendarEvent(object):
                 creds = flow.run_local_server(port=0)
             with open(f'media/{self.name}_token.json', 'w') as token:
                 token.write(creds.to_json())
+                
+
+        
         page_token = None
         service = build('calendar', 'v3', credentials=creds)
         myTimeZone = pytz.timezone('US/Pacific')

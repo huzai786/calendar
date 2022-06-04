@@ -86,15 +86,16 @@ def findCommon(list1, list2, minLength=timedelta(minutes=0)):
 
 
 def reduce(listOfLists, minLength):
+    
+    if len(listOfLists) == 1:
+        available_times = [i for i in listOfLists[0] if (i[1] - i[0]) > minLength]
+        return available_times
+    
+    if len(listOfLists) == 2:
+        return findCommon(listOfLists[0], listOfLists[1], minLength)
+    
     if len(listOfLists) > 2:
         return reduce([findCommon(listOfLists[0], listOfLists[1], minLength)] + listOfLists[2:], minLength)
-    elif len(listOfLists) == 2:
-        return findCommon(listOfLists[0], listOfLists[1], minLength)
-    if len(listOfLists) == 1:
-        for _range in listOfLists:
-            for i in _range:
-                if i[1] - i[0] > minLength:
-                    return [i]
 
 
 def merge(ranges):
@@ -179,4 +180,46 @@ def get_sunset(zipcode, for_date):
     s = sun.sun(city.observer, date=for_date, tzinfo=city.timezone)
     return (s['sunset']).replace(tzinfo=None, microsecond=0)
 
+
+def get_free_time_message(time_ranges, next_day, event_duration):
+    
+    next_day = next_day.strftime('%m-%d-%Y')
+    
+    if not 'temp_invalid' in time_ranges and None in time_ranges:
+
+        time_msg = f"extended event found for day {next_day}"
+        
+        return time_msg
+
+    if 'temp_invalid' in time_ranges and not None in time_ranges:
+
+        time_msg = f"Temperature filter not satisfied for day {next_day}"
+
+        return time_msg
+    
+    if 'temp_invalid' and None in time_ranges:
+
+        time_msg = f'temperature invalid and extended event found for day {next_day}'
+
+        return time_msg
+    
+    if not 'temp_invalid' in time_ranges and not None in time_ranges:
+
+        slot = reduce(time_ranges, minLength=timedelta(minutes=event_duration))
+
+        if slot != []:
+
+            start = slot[0][0].strftime('%m-%d-%Y %I %p %M minutes')
+
+            end = slot[0][1].strftime('%m-%d-%Y %I %p %M minutes')
+
+            time_msg = f'from {start} to {end}'
+            
+            return time_msg
+
+        if slot is []:
+
+            time_msg = f'no possible common time on {next_day}'
+
+            return time_msg
 
