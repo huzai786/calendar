@@ -34,7 +34,7 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
         snooze_is_applied = False
 
         while True:
-
+            print('-----------------------------')
             temp_check = None
 
             time_ranges = []
@@ -45,7 +45,9 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
             next_day = initial_date.replace(hour=0, minute=0)
 
             if next_day.strftime('%A') in days:
-
+                
+                print(f'checking the day {next_day.strftime("%m-%d-%Y")}')
+                
                 days_searched += 1
 
                 if any(['Temperature' in _dict.values() for _dict in filter_data]):
@@ -112,7 +114,9 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
                         initial_date += timedelta(days=snooze_duration)
                         continue
                     time_ranges.append(time_range)
-
+                    
+                print('time_ranges', time_ranges)
+                
                 time_msg = get_free_time_message(time_ranges, next_day, event_duration)
                 
                 possible_date_message += time_msg + '\n--------------------------------------------------------\n'

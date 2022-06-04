@@ -5,10 +5,12 @@ import os
 import pytz
 import sys
 from datetime import datetime
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+
 from packages.utils import (
     snooze_value, 
     time_gaps, 
@@ -43,8 +45,7 @@ class CalendarEvent(object):
                 creds = flow.run_local_server(port=0)
             with open(f'media/{self.name}_token.json', 'w') as token:
                 token.write(creds.to_json())
-                
-
+        
         
         page_token = None
         service = build('calendar', 'v3', credentials=creds)
@@ -54,13 +55,14 @@ class CalendarEvent(object):
         try:
             events = service.events().list(calendarId=self.calender_id, pageToken=page_token, timeMin= start.isoformat(), timeMax = end.isoformat()).execute()
             if len(events['items']) > 0:
+                
                 should_apply_snooze = None
-                event_ids = [event['id'] for event in events['items']]
                 free_date_ranges = []
                 busy_date_ranges = []
                 free_event_names = []
                 busy_event_names = []
                 
+                event_ids = [event['id'] for event in events['items']]
                 for e in event_ids:
                     single_event = service.events().get(calendarId=self.calender_id, eventId=e).execute()
                     event_name = single_event['summary']
@@ -84,7 +86,7 @@ class CalendarEvent(object):
                     should_apply_snooze = snooze_check
 
                 if include_free_event:
-                    if should_apply_snooze is True:
+                    if should_apply_snooze:
                         date_range = free_date_ranges + busy_date_ranges
                         truncated_ranges = merge_range(date_range)
                         time_ranges = time_gaps(start_date, truncated_ranges, end_date)
@@ -96,7 +98,7 @@ class CalendarEvent(object):
                         return sorted(time_ranges), False
 
                 if not include_free_event:
-                    if should_apply_snooze is True:
+                    if should_apply_snooze:
                         truncated_ranges = merge_range(busy_date_ranges)
                         time_ranges = time_gaps(start_date, truncated_ranges, end_date)
                         return sorted(time_ranges), True

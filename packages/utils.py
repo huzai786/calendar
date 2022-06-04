@@ -153,7 +153,6 @@ def get_lowtide(date):
         low_tide_value = [data.get('t') for data in tide_data if data.get('type') == 'L']
         return [datetime.strptime(i, '%Y-%m-%d %H:%M') for i in low_tide_value]
 
-
     except Exception as e:
         print('tide error', e)
         return 0
@@ -188,13 +187,13 @@ def get_free_time_message(time_ranges, next_day, event_duration):
     if not 'temp_invalid' in time_ranges and None in time_ranges:
 
         time_msg = f"extended event found for day {next_day}"
-        
+        print(f'extended event found for day {next_day}')
         return time_msg
 
     if 'temp_invalid' in time_ranges and not None in time_ranges:
 
         time_msg = f"Temperature filter not satisfied for day {next_day}"
-
+        print('temperature filter not satisfied')
         return time_msg
     
     if 'temp_invalid' and None in time_ranges:
@@ -206,20 +205,24 @@ def get_free_time_message(time_ranges, next_day, event_duration):
     if not 'temp_invalid' in time_ranges and not None in time_ranges:
 
         slot = reduce(time_ranges, minLength=timedelta(minutes=event_duration))
-
+        print('slot', slot)
         if slot != []:
+            
+            time_msg = f'time slots(s): '
+            
+            for instance in slot:
+                start = instance[0].strftime('%m-%d-%Y %I %p %M minutes')
 
-            start = slot[0][0].strftime('%m-%d-%Y %I %p %M minutes')
+                end = instance[1].strftime('%m-%d-%Y %I %p %M minutes')
 
-            end = slot[0][1].strftime('%m-%d-%Y %I %p %M minutes')
-
-            time_msg = f'from {start} to {end}'
+                time_msg += f'{start} to {end}, '
             
             return time_msg
 
-        if slot is []:
-
+        if slot == []:
+            print('yes slot is empty')
             time_msg = f'no possible common time on {next_day}'
 
             return time_msg
+
 

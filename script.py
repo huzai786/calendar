@@ -1,16 +1,21 @@
-from packages.utils import (
-    get_event_duration,
-    get_snooze_duration,
-    add_msg
-)
-from script_function import main_func
-from cal.models import EventDetails
 import os
 import django
 from datetime import datetime
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'calen.settings')
 django.setup()
+
+
+from packages.utils import (
+    get_event_duration,
+    get_snooze_duration,
+    add_msg
+)
+
+from script_function import main_func
+from cal.models import EventDetails
+
+
 
 
 def main():
