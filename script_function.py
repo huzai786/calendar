@@ -22,11 +22,9 @@ def main_func(title, days_to_look, calender_ids, days, filter_data, event_durati
     for i in calender_ids:
         
         path, name, calender_title, cal_id = i.get('token_url'), i.get('name'), i.get('title'), i.get('id')
-        
         calendar = CalendarEvent(name, path, cal_id)  # GET CALENDAR INSTANCE FROM ID
         
-        possible_date_message = f'Event: "{title}" \nCalender = \
-            {name}: {calender_title}\n==============================================\n'
+        possible_date_message = f'Event: "{title}" \nCalender = {name}: {calender_title}\n==============================================\n'
             
         days_searched = 0
         

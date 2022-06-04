@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from packages.script_utils import (
+from packages.utils import (
     get_lowtide,
     get_sunrise,
     get_sunset
