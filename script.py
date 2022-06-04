@@ -1,19 +1,22 @@
 import os
 import django
+from datetime import datetime
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'calen.settings')
 django.setup()
 
-
 from cal.models import EventDetails
-from script_func import main_func
 
-from datetime import datetime
-from packages.script_utils import get_event_duration, get_snooze_duration, add_msg
+from script_function import main_func
+from packages.utils import (
+    get_event_duration, 
+    get_snooze_duration, 
+    add_msg
+)
 
 
 
-
-def script():
+def main():
     date = datetime.now().strftime('%m-%d-%Y.%I%p.%Mmin%Ssec')
     msg = ''
     for event in EventDetails.objects.all():
@@ -39,13 +42,12 @@ def script():
         calender_ids = [{'name': i.name, 'id': i.ide,
                         'token_url': i.token_url, 'title': i.title} for i in event.calenders.all()]
 
-        mesg = main_func(title, days_to_look, calender_ids, days, filter_data, event_duration, \
+        message = main_func(title, days_to_look, calender_ids, days, filter_data, event_duration, \
                         snooze_duration, apply_snooze, snooze_days, include_free_event)
-        msg += mesg
+        msg += message
 
     add_msg(date, msg)
 
 
-
 if __name__ == '__main__':
-    script()
+    main()

@@ -1,4 +1,9 @@
+import requests
 from datetime import timedelta, datetime
+from meteostat import Point, Hourly
+from astral import LocationInfo, sun
+
+
 
 def add_msg(date, msg):
     with open(f'output_files/{date}.txt', 'w+') as f:
@@ -109,3 +114,69 @@ def merge_range(ranges):
     range_output = list(merge(ranges))
     range_output[-1] = tuple(range_output[-1])
     return range_output
+
+
+def get_temp(date):
+    start = date + timedelta(days=1, hours=12)
+    end = start + timedelta(hours=12)
+    Carlsbad = Point(33.0954, -117.2619, 143.5)
+    temp = Hourly(Carlsbad, start, end)
+    data = temp.fetch().to_dict()
+    y = data.get('temp')
+    lis = [v for k, v in y.items() if v is not int()]
+    try:
+        return max(lis)
+    except Exception as e:
+        return None
+
+
+def get_temperature(date):
+    day = date
+    while True:
+        a = get_temp(day)
+        if a != None:
+            return a
+            break
+        if a == None:
+            day = day - timedelta(days = 1)
+            continue
+
+
+def get_lowtide(date):
+    begin_date = date.strftime('%Y%m%d')
+    stop_date = (date + timedelta(days=0)).strftime('%Y%m%d') 
+    url = f"https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date={begin_date}&end_date={stop_date}&station=9410230&product=predictions&datum=MLLW&time_zone=lst_ldt&interval=hilo&units=english&format=json"
+    res = requests.get(url=url).json()
+    tide_data = res.get('predictions')
+    try:
+        low_tide_value = [data.get('t') for data in tide_data if data.get('type') == 'L']
+        return [datetime.strptime(i, '%Y-%m-%d %H:%M') for i in low_tide_value]
+
+
+    except Exception as e:
+        print('tide error', e)
+        return 0
+
+
+def get_sunrise(zipcode, for_date):
+    url = f"https://api.openweathermap.org/data/2.5/weather?zip={zipcode},us&appid=7015d42a7df0d257dad429a045772ef2"
+    res = requests.get(url=url).json()
+    longitude = res.get('coord').get('lon')
+    latitude = res.get('coord').get('lat')
+
+    city = LocationInfo('Carlsbad', 'california', "US/Pacific", latitude, longitude)
+    s = sun.sun(city.observer, date=for_date, tzinfo=city.timezone)
+    return (s['sunrise']).replace(tzinfo=None, microsecond=0)
+
+
+def get_sunset(zipcode, for_date):
+    url = f"https://api.openweathermap.org/data/2.5/weather?zip={zipcode},us&appid=7015d42a7df0d257dad429a045772ef2"
+    res = requests.get(url=url).json()
+    longitude = res.get('coord').get('lon')
+    latitude = res.get('coord').get('lat')
+
+    city = LocationInfo('Carlsbad', 'california', "US/Pacific", latitude, longitude)
+    s = sun.sun(city.observer, date=for_date, tzinfo=city.timezone)
+    return (s['sunset']).replace(tzinfo=None, microsecond=0)
+
+

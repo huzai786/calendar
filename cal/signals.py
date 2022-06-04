@@ -1,6 +1,6 @@
 from .models import EventDetails, Token, Calenders
 from django.db.models.signals import post_save
-from packages.calender_script import calendar_id_func
+from packages.calendar_ids import get_calendar_id
 from django.dispatch import receiver
 
 
@@ -10,11 +10,8 @@ def create_calender(sender, instance, created, **kwargs):
         email = instance.email
         name = instance.name
         token_url = instance.token_file.url
-        ids = calendar_id_func(name, token_url)
-        print(ids)
-        print('yes created!')
+        ids = get_calendar_id(name, token_url)
         for i in ids:
-            print(i)
             Calenders.objects.create(name=f'{name}', ide=i[0], token_url=f'{token_url}', title = i[1])
         
 

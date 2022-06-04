@@ -20,7 +20,7 @@ class CalendarEvent(object):
         self.token_url = token_url 
         self.calender_id = calender_id 
 
-    def get_event_detail(self, start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title):
+    def get_free_time_slots(self, start_date, end_date, apply_snooze, snooze_days, next_day, include_free_event, title):
         creds = None
         path = f'media/{self.name}_token.json'
         if os.path.exists(path):
